@@ -1,0 +1,19 @@
+{
+    'promptCellConfig': {
+        'autoClosingBrackets': false,
+        'cursorBlinkRate': 530,
+        'fontFamily': null,
+        'fontSize': null,
+        'lineHeight': null,
+        'lineNumbers': false,
+        'lineWrap': 'on',
+        'matchBrackets': true,
+        'readOnly': false,
+        'insertSpaces': true,
+        'tabSize': 4,
+        'wordWrapColumn': 99,
+        'rulers': [99],
+        'codeFolding': false,
+        'lineWiseCopyCut': true
+    },
+}

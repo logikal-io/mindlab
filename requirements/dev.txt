@@ -1,0 +1,9 @@
+-e .
+-r core.txt
+-r jupyter.txt
+-r spark.txt
+-r build.txt
+-r docs.txt
+
+pandas-stubs==1.5.2.221124
+pytest-logikal==1.2.0

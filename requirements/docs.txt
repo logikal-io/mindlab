@@ -1,0 +1,5 @@
+-e .
+-r core.txt
+-r spark.txt
+
+logikal-docs[jupyter]==1.1.1

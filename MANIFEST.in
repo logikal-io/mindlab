@@ -1,0 +1,9 @@
+exclude .gitignore
+prune .github
+prune docs
+prune requirements
+prune tests
+# Necessary for building, see https://github.com/pypa/setuptools/issues/3570
+include requirements/core.txt
+include requirements/jupyter.txt
+include requirements/spark.txt

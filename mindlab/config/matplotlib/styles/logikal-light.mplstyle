@@ -1,0 +1,2 @@
+# Line colors
+axes.prop_cycle: cycler('color', ['307FE2', 'E44B55', '001E62', '00BB7E', '9F5CC0', 'FF7500', '59CBE8', 'FFC600', 'EB6FBD', '75787B'])

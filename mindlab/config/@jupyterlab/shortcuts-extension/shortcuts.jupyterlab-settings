@@ -1,0 +1,206 @@
+{
+    'shortcuts': [
+        // Tabs
+        {
+            'command': 'application:activate-next-tab',
+            'keys': ['Ctrl Shift ]'],
+            'selector': 'body',
+            'disabled': true,
+        },
+        {
+            'command': 'application:activate-next-tab',
+            'keys': ['Ctrl ]'],
+            'selector': 'body',
+        },
+        {
+            'command': 'application:activate-next-tab',
+            'keys': ['Alt ]'],
+            'selector': 'body',
+        },
+        {
+            'command': 'application:activate-previous-tab',
+            'keys': ['Ctrl Shift ['],
+            'selector': 'body',
+            'disabled': true,
+        },
+        {
+            'command': 'application:activate-previous-tab',
+            'keys': ['Ctrl ['],
+            'selector': 'body',
+        },
+        {
+            'command': 'application:activate-previous-tab',
+            'keys': ['Alt ['],
+            'selector': 'body',
+        },
+        // Interface
+        {
+            'command': 'application:toggle-left-area',
+            'keys': ['Alt H'],
+            'selector': 'body',
+        },
+        {
+            'command': 'filebrowser:create-main-launcher',
+            'keys': ['Accel Shift L'],
+            'selector': 'body',
+            'disabled': true,
+        },
+        {
+            'command': 'filebrowser:create-main-launcher',
+            'keys': ['Alt L'],
+            'selector': 'body',
+        },
+        // Kernel
+        {
+            'command': 'runmenu:restart-and-run-all',
+            'keys': ['Alt A'],
+            'selector': '[data-jp-code-runner]',
+        },
+        {
+            'command': 'kernelmenu:interrupt',
+            'keys': ['I', 'I'],
+            'selector': '[data-jp-kernel-user]:focus',
+            'disabled': true,
+        },
+        {
+            'command': 'kernelmenu:interrupt',
+            'keys': ['Accel X'],
+            'selector': '[data-jp-kernel-user]:focus',
+        },
+        {
+            'command': 'kernelmenu:restart',
+            'keys': ['0', '0'],
+            'selector': '[data-jp-kernel-user]:focus',
+            'disabled': true,
+        },
+        {
+            'command': 'kernelmenu:restart',
+            'keys': ['Alt R'],
+            'selector': '[data-jp-kernel-user]:focus',
+        },
+        // Cells
+        {
+            'command': 'notebook:change-cell-to-code',
+            'keys': ['C'],
+            'selector': '.jp-Notebook:focus',
+        },
+        {
+            'command': 'notebook:delete-cell',
+            'keys': ['D', 'D'],
+            'selector': '.jp-Notebook:focus',
+            'disabled': true,
+        },
+        {
+            'command': 'notebook:cut-cell',
+            'keys': ['D', 'D'],
+            'selector': '.jp-Notebook:focus',
+        },
+        {
+            'command': 'notebook:copy-cell',
+            'keys': ['Y'],
+            'selector': '.jp-Notebook:focus',
+        },
+        {
+            'command': 'notebook:paste-cell-below',
+            'keys': ['V'],
+            'selector': '.jp-Notebook:focus',
+            'disabled': true,
+        },
+        {
+            'command': 'notebook:paste-cell-below',
+            'keys': ['P'],
+            'selector': '.jp-Notebook:focus',
+        },
+        {
+            'command': 'notebook:paste-cell-above',
+            'keys': ['Shift P'],
+            'selector': '.jp-Notebook:focus',
+        },
+        {
+            'command': 'notebook:merge-cells',
+            'keys': ['Shift M'],
+            'selector': '.jp-Notebook:focus',
+            'disabled': true,
+        },
+        {
+            'command': 'notebook:merge-cells',
+            'keys': ['Shift J'],
+            'selector': '.jp-Notebook:focus',
+        },
+        {
+            'command': 'notebook:move-cell-up',
+            'keys': ['Shift PageUp'],
+            'selector': '.jp-Notebook:focus',
+        },
+        {
+            'command': 'notebook:move-cell-down',
+            'keys': ['Shift PageDown'],
+            'selector': '.jp-Notebook:focus',
+        },
+        {
+            'command': 'notebook:enter-edit-mode',
+            'keys': ['I'],
+            'selector': '.jp-Notebook:focus',
+        },
+        {
+            'command': 'notebook:undo-cell-action',
+            'keys': ['Z'],
+            'selector': '.jp-Notebook:focus',
+            'disabled': true,
+        },
+        {
+            'command': 'notebook:undo-cell-action',
+            'keys': ['U'],
+            'selector': '.jp-Notebook:focus',
+        },
+        {
+            'command': 'notebook:redo-cell-action',
+            'keys': ['Shift Z'],
+            'selector': '.jp-Notebook:focus',
+            'disabled': true,
+        },
+        {
+            'command': 'notebook:redo-cell-action',
+            'keys': ['Shift U'],
+            'selector': '.jp-Notebook:focus',
+        },
+        {
+            'command': 'notebook:hide-cell-outputs',
+            'keys': ['H'],
+            'selector': '.jp-Notebook:focus',
+        },
+        {
+            'command': 'notebook:show-cell-outputs',
+            'keys': ['S'],
+            'selector': '.jp-Notebook:focus',
+        },
+        // Command completion
+        {
+            'command': 'completer:select-notebook',
+            'keys': ['Tab'],
+            'selector': '.jp-Notebook.jp-mod-editMode .jp-mod-completer-enabled',
+        },
+        {
+            'command': 'completer:invoke-notebook',
+            'keys': ['Tab'],
+            'selector': '.jp-Notebook.jp-mod-editMode .jp-mod-completer-enabled',
+            'disabled': true,
+        },
+        {
+            'command': 'completer:invoke-notebook',
+            'keys': ['Ctrl X'],
+            'selector': '.jp-Notebook.jp-mod-editMode .jp-mod-completer-enabled',
+        },
+        // JupyterLab LSP
+        {
+            'command': 'lsp:jump-to-definition-file_editor',
+            'keys': ['Alt G'],
+            'selector': '.jp-FileEditor',
+        },
+        {
+            'command': 'lsp:jump-to-definition-notebook',
+            'keys': ['Alt G'],
+            'selector': '.jp-Notebook .jp-CodeCell',
+        },
+    ]
+}
