@@ -39,7 +39,10 @@ jupyter = {file = 'requirements/jupyter.txt'}
 spark = {file = 'requirements/spark.txt'}
 
 [tool.setuptools]
-packages = ['mindlab', 'mindlab.config']
+packages = [
+  'mindlab', 'mindlab.config', 'mindlab.config.matplotlib',
+  'mindlab.config.matplotlib.fonts', 'mindlab.config.matplotlib.styles',
+]
 
 [tool.setuptools_scm]
 
