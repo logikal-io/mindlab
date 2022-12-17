@@ -61,6 +61,8 @@ class GCPAuth(Auth):
         if org_creds := self.organization_credentials_path(organization_id):
             credentials = load_credentials_from_file(org_creds, quota_project_id=project_id)[0]
         else:
+            # Note: we cannot specify the quota project ID here for some weird reason
+            # (see https://github.com/google-github-actions/auth/issues/250)
             credentials = default()[0]
 
         self._credentials[(organization_id, project_id)] = credentials

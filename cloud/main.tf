@@ -13,9 +13,9 @@ resource "google_project_iam_member" "service_user" {
   member = "serviceAccount:${module.github_auth.service_account_emails["testing"]}"
 }
 
-resource "google_project_iam_member" "bigquery_data_viewer" {
+resource "google_project_iam_member" "bigquery_job_user" {
   project = var.project_id
-  role = "roles/bigquery.dataViewer"
+  role = "roles/bigquery.jobUser"
   member = "serviceAccount:${module.github_auth.service_account_emails["testing"]}"
 }
 
