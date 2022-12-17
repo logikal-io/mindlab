@@ -62,9 +62,9 @@ class GCPAuth(Auth):
             credentials = load_credentials_from_file(org_creds, quota_project_id=project_id)[0]
         else:
             credentials = default(quota_project_id=project_id)[0]
-            print(default(quota_project_id=project_id)[1])  # TODO: remove
 
         # TODO: remove this
+        breakpoint()
         from google.auth.transport.requests import AuthorizedSession
         authed_session = AuthorizedSession(credentials)
         response = authed_session.get('https://www.googleapis.com/oauth2/v3/tokeninfo')
