@@ -1,5 +1,5 @@
-google-auth==2.14.1
-google-cloud-bigquery[pandas,tqdm]==3.4.0
+google-auth==2.15.0
+google-cloud-bigquery[pandas,tqdm]==3.4.1
 matplotlib==3.6.2
 numpy==1.23.5
 pandas==1.5.2
