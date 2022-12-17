@@ -63,6 +63,13 @@ class GCPAuth(Auth):
         else:
             credentials = default(quota_project_id=project_id)[0]
 
+        # TODO: remove this
+        from google.auth.transport.requests import AuthorizedSession
+        authed_session = AuthorizedSession(credentials)
+        response = authed_session.get('https://www.googleapis.com/oauth2/v3/tokeninfo')
+        print(response.json())
+        # TODO: remove this
+
         self._credentials[(organization_id, project_id)] = credentials
         return credentials, project_id
 
