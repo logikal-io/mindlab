@@ -61,7 +61,7 @@ class GCPAuth(Auth):
         if org_creds := self.organization_credentials_path(organization_id):
             credentials = load_credentials_from_file(org_creds, quota_project_id=project_id)[0]
         else:
-            credentials = default(quota_project_id=project_id)[0]
+            credentials = default()[0]
 
         self._credentials[(organization_id, project_id)] = credentials
         return credentials, project_id
