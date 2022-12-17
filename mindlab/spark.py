@@ -19,7 +19,7 @@ def lib_jar(lib: str, hadoop_common_libs: Optional[Path] = None) -> Path:
 
     lib_files = list(hadoop_common_libs.glob(f'{lib}-*.jar'))
     if not lib_files:
-        raise RuntimeError(f'You must install "{lib}" under "${hadoop_common_libs}"')
+        raise RuntimeError(f'You must install "{lib}" under "{hadoop_common_libs}"')
     if len(lib_files) > 1:
         raise RuntimeError(f'Multiple library files found: {lib_files}')
 
