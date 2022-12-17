@@ -7,6 +7,18 @@ module "github_auth" {
   }
 }
 
+resource "google_project_iam_member" "service_user" {
+  project = var.project_id
+  role = "roles/serviceusage.serviceUsageConsumer"
+  member = "serviceAccount:${module.github_auth.service_account_emails["testing"]}"
+}
+
+resource "google_project_iam_member" "bigquery_data_viewer" {
+  project = var.project_id
+  role = "roles/bigquery.dataViewer"
+  member = "serviceAccount:${module.github_auth.service_account_emails["testing"]}"
+}
+
 # Buckets
 module "gcs_test_data_bucket" {
   source = "github.com/logikal-io/terraform-modules//gcp/gcs-bucket?ref=v1.1.0"
