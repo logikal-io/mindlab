@@ -1,11 +1,16 @@
-output "workload_identity_provider" {
+output "gcp_workload_identity_provider" {
   description = "The full identifier of the GitHub workload identity pool provider"
-  value = module.github_auth.workload_identity_provider
+  value = module.gcp_github_auth.workload_identity_provider
 }
 
-output "service_account" {
+output "gcp_service_account" {
   description = "The email of the Google Cloud service account used for running tests"
-  value = module.github_auth.service_account_emails["testing"]
+  value = module.gcp_github_auth.service_account_emails["testing"]
+}
+
+output "aws_role" {
+  description = "The ARN of the AWS role used for running tests"
+  value = module.aws_github_auth.iam_role_arns["testing"]
 }
 
 output "gcs_test_bucket_url" {

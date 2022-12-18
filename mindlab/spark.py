@@ -61,14 +61,20 @@ def spark_session(
     # AWS S3 connector class
     extra_classes.append(lib_jar('hadoop-aws'))
     extra_classes.append(lib_jar('aws-java-sdk-bundle'))
-    environ['AWS_PROFILE'] = aws_auth.organization_id(organization)
-    conf.set('spark.hadoop.fs.s3a.aws.credentials.provider',
-             'com.amazonaws.auth.profile.ProfileCredentialsProvider')
     conf.set('spark.hadoop.fs.s3a.committer.name', 'directory')
     conf.set('spark.sql.sources.commitProtocolClass',
              'org.apache.spark.internal.io.cloud.PathOutputCommitProtocol')
     conf.set('spark.sql.parquet.output.committer.class',
              'org.apache.spark.internal.io.cloud.BindingParquetOutputCommitter')
+
+    # AWS S3 connector authentication
+    if 'AWS_ACCESS_KEY_ID' in environ and 'AWS_SECRET_ACCESS_KEY' in environ:
+        conf.set('spark.hadoop.fs.s3a.aws.credentials.provider',
+                 'com.amazonaws.auth.EnvironmentVariableCredentialsProvider')
+    else:
+        environ['AWS_PROFILE'] = aws_auth.organization_id(organization)
+        conf.set('spark.hadoop.fs.s3a.aws.credentials.provider',
+                 'com.amazonaws.auth.profile.ProfileCredentialsProvider')
 
     # Recommended settings (see https://spark.apache.org/docs/latest/cloud-integration.html)
     conf.set('spark.hadoop.mapreduce.fileoutputcommitter.algorithm.version', '2')

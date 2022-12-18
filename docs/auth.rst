@@ -3,8 +3,8 @@ Authentication
 Note that you must be authenticated towards the appropriate cloud provider for :ref:`magics:Magics`
 and the :ref:`spark:Spark` cloud storage connectors to function properly.
 
-Google Cloud Storage
---------------------
+Google Cloud Platform
+---------------------
 The default authentication mechanism first looks for a set of credentials in the
 ``$XDG_CONFIG_HOME/gcloud/credentials/{organization_id}.json`` file, where ``organization_id`` is
 derived from the ``organization`` value in the ``tool.mindlab`` section of the ``pyproject.toml``
@@ -20,6 +20,6 @@ of the ``pyproject.toml`` file.
 Amazon Web Services
 -------------------
 We look for the credentials of the ``organization_id`` named profile, where ``organization_id`` is
-derived the same way as it is for the Google Cloud Storage authentication.
+derived the same way as it is for the Google Cloud Platform authentication.
 
 .. autoclass:: mindlab.auth.AWSAuth
