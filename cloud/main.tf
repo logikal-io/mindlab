@@ -1,6 +1,6 @@
 # GitHub Actions
 module "gcp_github_auth" {
-  source = "github.com/logikal-io/terraform-modules//gcp/github-auth?ref=v1.1.0"
+  source = "github.com/logikal-io/terraform-modules//gcp/github-auth?ref=v1.2.0"
 
   service_account_accesses = {
     testing = ["logikal-io/mindlab"]
@@ -18,7 +18,7 @@ module "aws_github_auth" {
 
 # Buckets
 module "gcs_test_data_bucket" {
-  source = "github.com/logikal-io/terraform-modules//gcp/gcs-bucket?ref=v1.1.0"
+  source = "github.com/logikal-io/terraform-modules//gcp/gcs-bucket?ref=v1.2.0"
 
   name = "test-data"
   suffix = var.project_id
@@ -26,7 +26,7 @@ module "gcs_test_data_bucket" {
 }
 
 module "s3_test_data_bucket" {
-  source = "github.com/logikal-io/terraform-modules//aws/s3-bucket?ref=v1.1.0"
+  source = "github.com/logikal-io/terraform-modules//aws/s3-bucket?ref=v1.2.0"
 
   name = "test-data"
   suffix = var.project_id
