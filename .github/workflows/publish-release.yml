@@ -6,10 +6,14 @@ on:
 jobs:
   publish-release:
     name: Publish release
-    uses: logikal-io/github-workflows/.github/workflows/publish-release.yml@v2.1.2
-    with:
-      name: mindlab
+    uses: logikal-io/github-workflows/.github/workflows/publish-release.yml@v3.0.0
     permissions:
       contents: read
       id-token: write
+    with:
+      name: mindlab
+      hadoop-version: 3.3.1
+      hadoop-gcs-connector-version: 2.2.10
+      hadoop-aws-module-version: 3.3.1
+      aws-java-sdk-version: 1.11.901
     secrets: inherit

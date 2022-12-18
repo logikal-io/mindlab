@@ -4,7 +4,7 @@ on: pull_request
 jobs:
   run-python-tests:
     name: Run Python tests
-    uses: logikal-io/github-workflows/.github/workflows/run-python-tests.yml@v3.0.0-dev2
+    uses: logikal-io/github-workflows/.github/workflows/run-python-tests.yml@v3.0.0-dev3
     permissions:
       contents: read
       id-token: write
@@ -14,6 +14,7 @@ jobs:
       hadoop-aws-module-version: 3.3.1
       aws-java-sdk-version: 1.11.901
     secrets: inherit
+
   run-terraform-tests:
     name: Run Terraform tests
-    uses: logikal-io/github-workflows/.github/workflows/run-terraform-tests.yml@v2.1.2
+    uses: logikal-io/github-workflows/.github/workflows/run-terraform-tests.yml@v3.0.0-dev3
