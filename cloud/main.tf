@@ -16,19 +16,6 @@ module "aws_github_auth" {
   }
 }
 
-# Permissions
-resource "google_project_iam_member" "service_user" {
-  project = var.project_id
-  role = "roles/serviceusage.serviceUsageConsumer"
-  member = "serviceAccount:${module.gcp_github_auth.service_account_emails["testing"]}"
-}
-
-resource "google_project_iam_member" "bigquery_job_user" {
-  project = var.project_id
-  role = "roles/bigquery.jobUser"
-  member = "serviceAccount:${module.gcp_github_auth.service_account_emails["testing"]}"
-}
-
 # Buckets
 module "gcs_test_data_bucket" {
   source = "github.com/logikal-io/terraform-modules//gcp/gcs-bucket?ref=v1.1.0"
@@ -44,6 +31,38 @@ module "s3_test_data_bucket" {
   name = "test-data"
   suffix = var.project_id
   public = true
+}
+
+# Permissions
+resource "google_project_iam_member" "service_user" {
+  project = var.project_id
+  role = "roles/serviceusage.serviceUsageConsumer"
+  member = "serviceAccount:${module.gcp_github_auth.service_account_emails["testing"]}"
+}
+
+resource "google_project_iam_member" "bigquery_job_user" {
+  project = var.project_id
+  role = "roles/bigquery.jobUser"
+  member = "serviceAccount:${module.gcp_github_auth.service_account_emails["testing"]}"
+}
+
+data "aws_iam_policy_document" "test_data_bucket_access" {
+  version = "2012-10-17"
+
+  statement {
+    actions = ["s3:ListBucket", "s3:GetObject"]
+    resources = [module.s3_test_data_bucket.arn, "${module.s3_test_data_bucket.arn}/*"]
+  }
+}
+
+resource "aws_iam_policy" "test_data_bucket_access" {
+  name = "test-data-bucket-access"
+  policy = data.aws_iam_policy_document.test_data_bucket_access.json
+}
+
+resource "aws_iam_role_policy_attachment" "test_data_bucket_access" {
+  role = module.aws_github_auth.iam_role_names["testing"]
+  policy_arn = aws_iam_policy.test_data_bucket_access.arn
 }
 
 # BigQuery
