@@ -53,7 +53,7 @@ def test_spark_aws_auth(
     expected_provider: str,
     mocker: MockerFixture,
 ) -> None:
-    mocker.patch.dict(os.environ, env)
+    mocker.patch.dict(os.environ, env, clear=True)
     mocker.patch('mindlab.spark.SparkSession')
     mocker.patch('mindlab.spark.SparkContext')
     gateway = mocker.patch('mindlab.spark.launch_gateway')
