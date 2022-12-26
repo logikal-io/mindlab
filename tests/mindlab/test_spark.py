@@ -47,7 +47,7 @@ def test_spark_gcs_auth(
     ({'AWS_ACCESS_KEY_ID': 'test', 'AWS_SECRET_ACCESS_KEY': 'test'},
      'com.amazonaws.auth.EnvironmentVariableCredentialsProvider'),
     ({'AWS_ACCESS_KEY_ID': '', 'AWS_SECRET_ACCESS_KEY': ''},
-    ('com.amazonaws.auth.profile.ProfileCredentialsProvider'),
+     'com.amazonaws.auth.profile.ProfileCredentialsProvider'),
 ])
 def test_spark_aws_auth(
     env: Dict[str, str],
