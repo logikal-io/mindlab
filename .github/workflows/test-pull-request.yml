@@ -8,7 +8,7 @@ jobs:
     with:
       # Note: documentation building fails because of a GCS connector authentication issue
       # (see https://github.com/GoogleCloudDataproc/hadoop-connectors/issues/671)
-      pytest-opts: --no-docs
+      pytest-options: --no-docs
       # Note: versions must be mirrored in the publish-release.yml workflow
       hadoop-version: 3.3.1
       hadoop-gcs-connector-version: 2.2.10
