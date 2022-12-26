@@ -4,7 +4,7 @@ on: pull_request
 jobs:
   run-python-tests:
     name: Run Python tests
-    uses: logikal-io/github-workflows/.github/workflows/run-python-tests.yml@v3
+    uses: logikal-io/github-workflows/.github/workflows/run-python-tests.yml@v3.2.1-dev0
     with:
       # Note: documentation building fails because of a GCS connector authentication issue
       # (see https://github.com/GoogleCloudDataproc/hadoop-connectors/issues/671)
@@ -21,4 +21,4 @@ jobs:
 
   run-terraform-tests:
     name: Run Terraform tests
-    uses: logikal-io/github-workflows/.github/workflows/run-terraform-tests.yml@v3
+    uses: logikal-io/github-workflows/.github/workflows/run-terraform-tests.yml@v3.2.1-dev0
