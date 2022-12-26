@@ -70,3 +70,6 @@ filterwarnings = [
   # This can be removed when using jupyter_core 6+
   'ignore:Jupyter is migrating its paths.*:DeprecationWarning',
 ]
+
+[tool.coverage.report]
+exclude_lines = ['except ImportError:', '= _missing_extra\([^)]+\)']  # extras

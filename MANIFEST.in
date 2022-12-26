@@ -1,5 +1,6 @@
 exclude .gitignore
 prune .github
+prune cloud
 prune docs
 prune requirements
 prune tests
