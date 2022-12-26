@@ -95,7 +95,7 @@ use_mindlab_styles()
 class Figure:
     def __init__(  # pylint: disable=too-many-arguments
         self,
-        size: Tuple[float, float] = (8, 4),
+        size: Optional[Tuple[float, float]] = None,
         title: Optional[str] = None,
         xlabel: Optional[str] = None,
         ylabel: Optional[str] = None,

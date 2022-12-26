@@ -15,6 +15,9 @@ class Auth:  # pylint: disable=too-few-public-methods
         )
 
     def organization_id(self, organization: Optional[str] = None) -> str:
+        """
+        Return the canonical organization ID.
+        """
         organization = organization or self.organization
         if not organization:
             raise ValueError('You must provide an organization')
@@ -35,6 +38,9 @@ class GCPAuth(Auth):
         self._credentials = {}
 
     def project_id(self, organization_id: str, project: Optional[str] = None) -> str:
+        """
+        Return the canonical project ID.
+        """
         project = project or self.project
         if not project:
             raise ValueError('You must provide a project')
@@ -43,16 +49,25 @@ class GCPAuth(Auth):
     def ids(
         self, organization: Optional[str] = None, project: Optional[str] = None,
     ) -> Tuple[str, str]:
+        """
+        Return a tuple of organization ID and project ID.
+        """
         organization_id = self.organization_id(organization)
         return organization_id, self.project_id(organization_id, project)
 
     def organization_credentials_path(self, organization_id: str) -> Optional[Path]:
+        """
+        Return the path to the organization credentials or None if it does not exist.
+        """
         credentials_path = self._gcloud_config / f'credentials/{organization_id}.json'
         return credentials_path if credentials_path.exists() else None
 
     def credentials(
         self, organization: Optional[str] = None, project: Optional[str] = None,
     ) -> Tuple[Credentials, str]:
+        """
+        Return a tuple of credentials and project ID.
+        """
         organization_id, project_id = self.ids(organization, project)
 
         if credentials := self._credentials.get((organization_id, project_id)):

@@ -1,11 +1,12 @@
 import os
 from pathlib import Path
-from typing import Optional
+from typing import Dict, Optional
 
 import pandas
 from pandas.testing import assert_frame_equal
+from py4j.protocol import Py4JJavaError  # type: ignore[import]
 from pyspark.sql import SparkSession
-from pytest import mark, raises
+from pytest import mark, param, raises
 from pytest_mock import MockerFixture
 
 from mindlab.spark import lib_jar, spark_session
@@ -42,10 +43,38 @@ def test_spark_gcs_auth(
     assert conf.get('spark.hadoop.google.cloud.auth.type') == expected_type
 
 
+@mark.parametrize('env, expected_provider', [
+    ({'AWS_ACCESS_KEY_ID': 'test', 'AWS_SECRET_ACCESS_KEY': 'test'},
+     'com.amazonaws.auth.EnvironmentVariableCredentialsProvider'),
+    ({}, 'com.amazonaws.auth.profile.ProfileCredentialsProvider'),
+])
+def test_spark_aws_auth(
+    env: Dict[str, str],
+    expected_provider: str,
+    mocker: MockerFixture,
+) -> None:
+    mocker.patch.dict(os.environ, env)
+    mocker.patch('mindlab.spark.SparkSession')
+    mocker.patch('mindlab.spark.SparkContext')
+    gateway = mocker.patch('mindlab.spark.launch_gateway')
+    spark_session()
+    conf = gateway.mock_calls[0].kwargs['conf']
+    assert conf.get('spark.hadoop.fs.s3a.aws.credentials.provider') == expected_provider
+
+
 # See https://issues.apache.org/jira/browse/SPARK-38659
 @mark.filterwarnings('ignore:unclosed.*socket.*:ResourceWarning')
 @mark.parametrize('path', [
-    'gs://test-data-mindlab-logikal-io',
+    param(
+        'gs://test-data-mindlab-logikal-io',
+        marks=mark.xfail(
+            # See https://github.com/GoogleCloudDataproc/hadoop-connectors/issues/671
+            # Note: make sure to delete the `pytest-opts: --no-docs` exception from the
+            # test-pull-request workflow once this issue is fixed
+            condition='GITHUB_ACTIONS' in os.environ,
+            reason='auth bug', raises=Py4JJavaError, strict=True,
+        ),
+    ),
     's3a://test-data-eu-central-2-mindlab-logikal-io',
 ])
 def test_cloud_read(path: str, spark: SparkSession) -> None:

@@ -12,6 +12,8 @@ intersphinx_mapping = {
     'pandas': (f'https://pandas.pydata.org/pandas-docs/version/{pkg_version("pandas")}', None),
     'matplotlib': (f'https://matplotlib.org/{pkg_version("matplotlib")}/', None),
     'pyspark': (f'https://spark.apache.org/docs/{pkg_version("pyspark")}/api/python/', None),
+    'google.auth': (f'https://googleapis.dev/python/google-auth/{pkg_version("google-auth")}/',
+                    None),
 }
 nitpick_ignore = [
     ('py:class', 'pandas.core.groupby.generic.DataFrameGroupBy'),

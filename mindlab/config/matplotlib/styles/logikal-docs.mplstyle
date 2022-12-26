@@ -1,0 +1,11 @@
+# Figure
+figure.figsize: 5.8, 3
+
+# Font sizes
+font.size: 10
+figure.titlesize: 12
+axes.titlesize: 12
+axes.labelsize: 12
+legend.fontsize: 10
+xtick.labelsize: 10
+ytick.labelsize: 10

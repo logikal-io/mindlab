@@ -5,14 +5,18 @@ jobs:
   run-python-tests:
     name: Run Python tests
     uses: logikal-io/github-workflows/.github/workflows/run-python-tests.yml@v3.0.0-dev3
-    permissions:
-      contents: read
-      id-token: write
     with:
+      # Note: documentation building fails because of a GCS connector authentication issue
+      # (see https://github.com/GoogleCloudDataproc/hadoop-connectors/issues/671)
+      pytest-opts: --no-docs
+      # Note: versions must be mirrored in the publish-release.yml workflow
       hadoop-version: 3.3.1
       hadoop-gcs-connector-version: 2.2.10
       hadoop-aws-module-version: 3.3.1
       aws-java-sdk-version: 1.11.901
+    permissions:
+      contents: read
+      id-token: write
     secrets: inherit
 
   run-terraform-tests:
