@@ -68,7 +68,7 @@ def spark_session(
              'org.apache.spark.internal.io.cloud.BindingParquetOutputCommitter')
 
     # AWS S3 connector authentication
-    if 'AWS_ACCESS_KEY_ID' in environ and 'AWS_SECRET_ACCESS_KEY' in environ:
+    if environ.get('AWS_ACCESS_KEY_ID') and environ.get('AWS_SECRET_ACCESS_KEY'):
         conf.set('spark.hadoop.fs.s3a.aws.credentials.provider',
                  'com.amazonaws.auth.EnvironmentVariableCredentialsProvider')
     else:

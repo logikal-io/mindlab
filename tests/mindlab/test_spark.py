@@ -46,14 +46,15 @@ def test_spark_gcs_auth(
 @mark.parametrize('env, expected_provider', [
     ({'AWS_ACCESS_KEY_ID': 'test', 'AWS_SECRET_ACCESS_KEY': 'test'},
      'com.amazonaws.auth.EnvironmentVariableCredentialsProvider'),
-    ({}, 'com.amazonaws.auth.profile.ProfileCredentialsProvider'),
+    ({'AWS_ACCESS_KEY_ID': '', 'AWS_SECRET_ACCESS_KEY': ''},
+    ('com.amazonaws.auth.profile.ProfileCredentialsProvider'),
 ])
 def test_spark_aws_auth(
     env: Dict[str, str],
     expected_provider: str,
     mocker: MockerFixture,
 ) -> None:
-    mocker.patch.dict(os.environ, env, clear=True)
+    mocker.patch.dict(os.environ, env)
     mocker.patch('mindlab.spark.SparkSession')
     mocker.patch('mindlab.spark.SparkContext')
     gateway = mocker.patch('mindlab.spark.launch_gateway')
