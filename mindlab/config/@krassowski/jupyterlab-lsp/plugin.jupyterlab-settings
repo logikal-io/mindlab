@@ -1,0 +1,40 @@
+{
+    'language_servers': {
+        'pylsp': {
+            'serverSettings': {
+                'pylsp': {
+                    'plugins': {
+                        'pycodestyle': {
+                            'enabled': true,
+                            'maxLineLength': 99,
+                            'ignore': [
+                                'E402', 'E703',
+                                'W503', 'W504',
+                                'W391',
+                            ],
+
+                        },
+                        'pydocstyle': {
+                            'enabled': false,
+                        },
+                        'flake8': {
+                            'enabled': false,
+                        },
+                        'pyflakes': {
+                            'enabled': false,
+                        },
+                        'pylint': {
+                            'enabled': false,
+                        },
+                        'rope_completion': {
+                            'enabled': false,
+                        },
+                        'yapf': {
+                            'enabled': false,
+                        },
+                    }
+                }
+            }
+        }
+    }
+}

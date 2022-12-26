@@ -1,0 +1,21 @@
+# Line colors
+axes.prop_cycle: cycler('color', ['438FFF', 'EB3742', '072B7C', '00BB7E', '9F5CC0', 'FF7500', '59CBE8', 'FFC600', 'EB6FBD', '75787B'])
+
+# Figure colors for light background
+patch.edgecolor: black
+hatch.color: black
+boxplot.flierprops.markeredgecolor: black
+boxplot.boxprops.color: black
+boxplot.whiskerprops.color: black
+boxplot.capprops.color: black
+text.color: black
+axes.facecolor: white
+axes.edgecolor: black
+axes.labelcolor: black
+xtick.color: black
+ytick.color: black
+grid.color: BBBCBC
+grid.alpha: 0.5
+legend.edgecolor: BBBCBC
+figure.facecolor: white
+figure.edgecolor: white

@@ -1,2 +1,0 @@
-# mindlab
-Data science toolbox

@@ -1,0 +1,72 @@
+[build-system]
+requires = ['setuptools>=45', 'setuptools-scm[toml]>=6.2']
+build-backend = 'setuptools.build_meta'
+
+[project]
+name = 'mindlab'
+description = 'Data science toolbox'
+readme = 'README.rst'
+requires-python = '~= 3.8'
+license = {file = 'LICENSE.txt'}
+authors = [{name = 'Logikal GmbH', email = 'contact@logikal.io'}]
+keywords = ['data', 'jupyterlab', 'spark']
+classifiers = [
+  'Development Status :: 5 - Production/Stable',
+  'Framework :: Jupyter :: JupyterLab',
+  'Intended Audience :: Science/Research',
+  'License :: OSI Approved :: MIT License',
+  'Operating System :: POSIX :: Linux',
+  'Programming Language :: Python :: 3',
+  'Programming Language :: Python :: 3.8',
+  'Topic :: Scientific/Engineering',
+]
+dynamic = ['version', 'dependencies', 'optional-dependencies']
+
+[project.scripts]
+lab = 'mindlab.lab:main'
+
+[project.urls]
+'Documentation' = 'https://docs.logikal.io/mindlab/'
+'Release notes' = 'https://github.com/logikal-io/mindlab/releases'
+'Issue tracker' = 'https://github.com/logikal-io/mindlab/issues'
+'Source code' = 'https://github.com/logikal-io/mindlab'
+
+[tool.setuptools.dynamic]
+dependencies = {file = 'requirements/core.txt'}
+
+[tool.setuptools.dynamic.optional-dependencies]
+jupyter = {file = 'requirements/jupyter.txt'}
+spark = {file = 'requirements/spark.txt'}
+
+[tool.setuptools]
+packages = [
+  'mindlab', 'mindlab.config', 'mindlab.config.matplotlib',
+  'mindlab.config.matplotlib.fonts', 'mindlab.config.matplotlib.styles',
+]
+
+[tool.setuptools_scm]
+
+[tool.mindlab]
+organization = 'logikal.io'
+project = 'mindlab'
+
+[[tool.mypy.overrides]]
+ignore_missing_imports = true
+module = [
+  'google.auth.*',
+  'humanize.*',
+  'IPython.*',
+  'ipywidgets',
+  'jupyter_core.*',
+  'matplotlib.*',
+]
+
+[tool.pylint.BASIC]
+good-names = ['bar']
+
+[tool.pytest.ini_options]
+norecursedirs = ['build', 'docs/jupyter_execute']
+filterwarnings = [
+  # This can be removed when using jupyter_core 6+
+  'ignore:Jupyter is migrating its paths.*:DeprecationWarning',
+]

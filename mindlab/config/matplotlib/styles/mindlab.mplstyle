@@ -1,0 +1,86 @@
+# Lines
+lines.linewidth: 1.5
+lines.marker: o
+lines.markeredgewidth: 1.5
+lines.solid_joinstyle: round
+lines.solid_capstyle: butt
+markers.fillstyle: none
+
+# Patches
+patch.linewidth: 1
+
+# Hatches
+hatch.linewidth: 1.5
+
+# Boxplot
+boxplot.showmeans: True
+boxplot.meanline: False
+boxplot.flierprops.markeredgewidth: 1.5
+boxplot.boxprops.linewidth: 1.5
+boxplot.whiskerprops.linewidth: 1.5
+boxplot.capprops.linewidth: 1.5
+boxplot.medianprops.color: C1
+boxplot.medianprops.linewidth: 1.5
+boxplot.meanprops.marker: x
+boxplot.meanprops.markeredgecolor: C0
+boxplot.meanprops.markersize: 6
+
+# Font
+font.family: sans-serif
+font.size: 12
+font.sans-serif: Lato
+
+# Axes
+axes.linewidth: 1
+axes.grid: True
+axes.titlesize: 14
+axes.titlepad: 12
+axes.labelsize: 14
+axes.labelpad: 8
+axes.axisbelow: True
+
+# Ticks
+xtick.major.size: 7
+xtick.minor.size: 4
+xtick.major.width: 1
+xtick.minor.width: 0.5
+xtick.major.pad: 4
+xtick.minor.pad: 4
+xtick.labelsize: 12
+xtick.minor.visible: True
+
+ytick.major.size: 7
+ytick.minor.size: 4
+ytick.major.width: 1
+ytick.minor.width: 0.5
+ytick.major.pad: 4
+ytick.minor.pad: 4
+ytick.labelsize: 12
+ytick.minor.visible: True
+
+# Grids
+grid.linewidth: 1
+
+# Legend
+legend.framealpha: 1
+legend.fancybox: False
+legend.fontsize: 12
+
+# Figure
+figure.titlesize: 16
+figure.titleweight: normal
+figure.figsize: 8, 4
+figure.dpi: 90
+
+figure.constrained_layout.use: True
+figure.constrained_layout.h_pad: 0.1
+figure.constrained_layout.w_pad: 0.1
+
+# Errorbar plots
+errorbar.capsize: 4
+
+# Histogram plots
+hist.bins: auto
+
+# Saving figures
+savefig.dpi: 300
