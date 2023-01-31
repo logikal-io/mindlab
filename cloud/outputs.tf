@@ -18,7 +18,7 @@ output "gcs_test_bucket_url" {
   value = module.gcs_test_data_bucket.url
 }
 
-# output "aws_s3_test_bucket_url" {
-#   description = "The AWS S3 test data bucket URL"
-#   value = "s3://${module.s3_test_data_bucket.name}"
-# }
+output "aws_s3_test_bucket_url" {
+  description = "The AWS S3 test data bucket URL"
+  value = "s3://${module.s3_test_data_bucket.name}"
+}

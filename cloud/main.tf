@@ -145,3 +145,36 @@ resource "aws_iam_role_policy_attachment" "test_data_bucket_access" {
   role = module.aws_github_auth.iam_role_names["testing"]
   policy_arn = aws_iam_policy.test_data_bucket_access.arn
 }
+
+data "aws_iam_policy" "athena_primary_workgroup_access" {
+  name = "athena-primary-workgroup-access"
+}
+
+resource "aws_iam_role_policy_attachment" "athena_primary_workgroup_access" {
+  role = module.aws_github_auth.iam_role_names["testing"]
+  policy_arn = data.aws_iam_policy.athena_primary_workgroup_access.arn
+}
+
+data "aws_kms_key" "glue_data_catalog" {
+  key_id = "alias/glue/data-catalog"
+}
+
+data "aws_iam_policy_document" "test_data_glue_access" {
+  statement {
+    actions = ["glue:GetDatabase", "glue:GetTable"]
+    resources = [
+      aws_glue_catalog_database.test.arn,
+      aws_glue_catalog_table.order_line_items.arn,
+    ]
+  }
+}
+
+resource "aws_iam_policy" "test_data_glue_access" {
+  name = "test-data-glue-access"
+  policy = data.aws_iam_policy_document.test_data_glue_access.json
+}
+
+resource "aws_iam_role_policy_attachment" "test_data_glue_access" {
+  role = module.aws_github_auth.iam_role_names["testing"]
+  policy_arn = aws_iam_policy.test_data_glue_access.arn
+}
