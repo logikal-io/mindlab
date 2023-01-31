@@ -155,10 +155,6 @@ resource "aws_iam_role_policy_attachment" "athena_primary_workgroup_access" {
   policy_arn = data.aws_iam_policy.athena_primary_workgroup_access.arn
 }
 
-data "aws_kms_key" "glue_data_catalog" {
-  key_id = "alias/glue/data-catalog"
-}
-
 data "aws_iam_policy_document" "test_data_glue_access" {
   statement {
     actions = ["glue:GetDatabase", "glue:GetTable"]
