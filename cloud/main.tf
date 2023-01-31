@@ -115,6 +115,13 @@ resource "aws_glue_catalog_table" "order_line_items" {
 }
 
 # Permissions
+locals {
+  service_accounts = toset([
+    module.gcp_github_auth.service_account_emails["testing"],
+    "docs-uploader@docs-logikal-io.iam.gserviceaccount.com",
+  ])
+}
+
 resource "google_project_iam_member" "service_user" {
   project = var.project_id
   role = "roles/serviceusage.serviceUsageConsumer"
@@ -122,9 +129,11 @@ resource "google_project_iam_member" "service_user" {
 }
 
 resource "google_project_iam_member" "bigquery_job_user" {
+  for_each = local.service_accounts
+
   project = var.project_id
   role = "roles/bigquery.jobUser"
-  member = "serviceAccount:${module.gcp_github_auth.service_account_emails["testing"]}"
+  member = "serviceAccount:${each.key}"
 }
 
 data "aws_iam_policy_document" "test_data_bucket_access" {
