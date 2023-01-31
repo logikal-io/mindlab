@@ -1,8 +1,12 @@
-google-auth==2.15.0
-google-cloud-bigquery[pandas,tqdm]==3.4.1
-matplotlib==3.6.2
-numpy==1.24.0
-pandas==1.5.2
-scipy==1.9.3
-tomli==2.0.1
-xdg==5.1.1
+# Packages with external visibility (in magics or plotting)
+awswrangler==2.19.0
+google-cloud-bigquery[pandas,tqdm]==3.4.2
+matplotlib==3.6.3
+# Packages without external visibility (internally used, unlikely to change functionality)
+numpy~=1.23
+pandas~=1.5
+pandas-stubs~=1.5
+scipy~=1.10  # needed for pandas KDE plots
+stormware[google,amazon]~=1.1
+tomli~=2.0
+xdg~=5.1

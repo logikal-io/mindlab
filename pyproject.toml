@@ -35,8 +35,8 @@ lab = 'mindlab.lab:main'
 dependencies = {file = 'requirements/core.txt'}
 
 [tool.setuptools.dynamic.optional-dependencies]
-jupyter = {file = 'requirements/jupyter.txt'}
-spark = {file = 'requirements/spark.txt'}
+jupyter = {file = 'requirements/extras/jupyter.txt'}
+spark = {file = 'requirements/extras/spark.txt'}
 
 [tool.setuptools]
 packages = [
@@ -49,16 +49,17 @@ packages = [
 [tool.mindlab]
 organization = 'logikal.io'
 project = 'mindlab'
+athena_region = 'eu-central-1'
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
 module = [
-  'google.auth.*',
   'humanize.*',
   'IPython.*',
   'ipywidgets',
   'jupyter_core.*',
   'matplotlib.*',
+  'redshift_connector',
 ]
 
 [tool.pylint.BASIC]
@@ -72,4 +73,5 @@ filterwarnings = [
 ]
 
 [tool.coverage.report]
+omit = ['docs/conf.py']  # being run in a subthread during documentation building
 exclude_lines = ['except ImportError:', '= _missing_extra\([^)]+\)']  # extras
