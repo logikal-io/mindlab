@@ -1,6 +1,6 @@
 -e .
 -r core.txt
--r jupyter.txt
--r spark.txt
+-r extras/jupyter.txt
+-r extras/spark.txt
 
-logikal-docs[jupyter]==1.1.2
+logikal-docs[jupyter]==1.1.3

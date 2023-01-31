@@ -65,9 +65,9 @@ def test_spark_aws_auth(
 
 # See https://issues.apache.org/jira/browse/SPARK-38659
 @mark.filterwarnings('ignore:unclosed.*socket.*:ResourceWarning')
-@mark.parametrize('path', [
+@mark.parametrize('data_path', [
     param(
-        'gs://test-data-mindlab-logikal-io',
+        'gs://test-data-mindlab-logikal-io/order_line_items.csv',
         marks=mark.xfail(
             # See https://github.com/GoogleCloudDataproc/hadoop-connectors/issues/671
             # Note: make sure to delete the `pytest-opts: --no-docs` exception from the
@@ -76,12 +76,10 @@ def test_spark_aws_auth(
             reason='auth bug', raises=Py4JJavaError, strict=True,
         ),
     ),
-    's3a://test-data-eu-central-2-mindlab-logikal-io',
+    's3a://test-data-eu-central-1-mindlab-logikal-io/order_line_items/data.csv',
 ])
-def test_cloud_read(path: str, spark: SparkSession) -> None:
-    data_file = 'order_line_items.csv'
-    data_path = f'{path}/{data_file}'
+def test_cloud_read(data_path: str, spark: SparkSession) -> None:
     actual: pandas.DataFrame = spark.read.csv(data_path, inferSchema=True, header=True).toPandas()
     actual = actual.astype({column: 'int64' for column in actual.select_dtypes('int32').columns})
-    expected = pandas.read_csv(Path(__file__).parent / 'data' / data_file)
+    expected = pandas.read_csv(Path(__file__).parent / 'data/order_line_items.csv')
     assert_frame_equal(actual, expected)

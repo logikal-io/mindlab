@@ -7,8 +7,10 @@ from pyspark.conf import SparkConf
 from pyspark.context import SparkContext
 from pyspark.java_gateway import launch_gateway
 from pyspark.sql import SparkSession
+from stormware.amazon.auth import AWSAuth
+from stormware.google.auth import GCPAuth
 
-from mindlab.auth import AWSAuth, GCPAuth
+from mindlab.pyproject import MINDLAB_CONFIG
 
 
 def lib_jar(lib: str, hadoop_common_libs: Optional[Path] = None) -> Path:
@@ -38,6 +40,7 @@ def spark_session(
         A pre-configured :class:`SparkSession <pyspark.sql.SparkSession>` instance.
 
     """
+    organization = organization or MINDLAB_CONFIG.get('organization')
     aws_auth = aws_auth or AWSAuth()
     gcp_auth = gcp_auth or GCPAuth()
 
@@ -51,7 +54,7 @@ def spark_session(
 
     # GCS connector authentication
     # (https://github.com/GoogleCloudDataproc/hadoop-connectors/blob/master/gcs/CONFIGURATION.md)
-    if keyfile := gcp_auth.organization_credentials_path(gcp_auth.organization_id(organization)):
+    if keyfile := gcp_auth.organization_credentials_path(organization):
         conf.set('spark.hadoop.google.cloud.auth.type', 'SERVICE_ACCOUNT_JSON_KEYFILE')
         conf.set('spark.hadoop.google.cloud.auth.service.account.enable', 'true')
         conf.set('spark.hadoop.google.cloud.auth.service.account.json.keyfile', str(keyfile))

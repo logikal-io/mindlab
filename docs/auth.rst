@@ -1,25 +1,23 @@
 Authentication
 ==============
-Note that you must be authenticated towards the appropriate cloud provider for :ref:`magics:Magics`
-and the :ref:`spark:Spark` cloud storage connectors to function properly.
+.. note:: You must be authenticated towards the appropriate cloud provider for :ref:`magics:Magics`
+    and the :ref:`spark:Spark` cloud storage connectors to function properly.
 
-Google Cloud Platform
----------------------
-The default authentication mechanism first looks for a set of credentials in the
-``$XDG_CONFIG_HOME/gcloud/credentials/{organization_id}.json`` file, where ``organization_id`` is
-derived from the ``organization`` value in the ``tool.mindlab`` section of the ``pyproject.toml``
-file. Note that you can also use your application default credentials by copying it to this
-location or by creating a symlink to it. If the above-mentioned file does not exist, we look for
-the application default credentials.
+MindLab uses `Stormware <https://docs.logikal.io/stormware/latest/>`_ for authentication, therefore
+we can simply follow the steps for the appropriate platforms in the :doc:`Authentication section
+<stormware:auth>` of the Stormware documentation.
 
-A default Google Cloud project can be set under the ``project`` key in the ``tool.mindlab`` section
-of the ``pyproject.toml`` file.
+Configuration
+-------------
+Note that the authentication configuration can be also added to the ``[tool.mindlab]`` section of
+the project's ``pyproject.toml`` file (instead of or in addition to the ``[tool.stormware]``
+section) as follows:
 
-.. autoclass:: mindlab.auth.GCPAuth
+.. code-block:: toml
 
-Amazon Web Services
--------------------
-We look for the credentials of the ``organization_id`` named profile, where ``organization_id`` is
-derived the same way as it is for the Google Cloud Platform authentication.
+    [tool.mindlab]
+    organization = 'example.com'
+    project = 'my-project'
 
-.. autoclass:: mindlab.auth.AWSAuth
+When a configuration option is set in both the ``mindlab`` and ``stormware`` sections, the value in
+the ``mindlab`` section takes precedence.

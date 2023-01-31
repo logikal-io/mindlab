@@ -82,7 +82,7 @@ defaults and auto-completion:
     [I ... ServerApp]  or http://127.0.0.1:8888/lab?token={token}
 
 Executing queries against various data sources is extremely simple using the provided :ref:`MindLab
-Magics <magics:Magics>`:
+Magics <magics:Magics>` (after :ref:`authentication <auth:Authentication>`):
 
 .. jupyter-execute::
 
