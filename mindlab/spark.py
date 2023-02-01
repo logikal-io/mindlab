@@ -10,7 +10,7 @@ from pyspark.sql import SparkSession
 from stormware.amazon.auth import AWSAuth
 from stormware.google.auth import GCPAuth
 
-from mindlab.pyproject import MINDLAB_CONFIG
+from mindlab.utils import get_config
 
 
 def lib_jar(lib: str, hadoop_common_libs: Optional[Path] = None) -> Path:
@@ -40,7 +40,7 @@ def spark_session(
         A pre-configured :class:`SparkSession <pyspark.sql.SparkSession>` instance.
 
     """
-    organization = organization or MINDLAB_CONFIG.get('organization')
+    organization = get_config('organization', organization)
     aws_auth = aws_auth or AWSAuth()
     gcp_auth = gcp_auth or GCPAuth()
 
@@ -75,7 +75,7 @@ def spark_session(
         conf.set('spark.hadoop.fs.s3a.aws.credentials.provider',
                  'com.amazonaws.auth.EnvironmentVariableCredentialsProvider')
     else:
-        environ['AWS_PROFILE'] = aws_auth.organization_id(organization)
+        environ.setdefault('AWS_PROFILE', aws_auth.organization_id(organization))
         conf.set('spark.hadoop.fs.s3a.aws.credentials.provider',
                  'com.amazonaws.auth.profile.ProfileCredentialsProvider')
 

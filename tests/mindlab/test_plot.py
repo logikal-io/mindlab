@@ -23,12 +23,7 @@ def test_use_mindlab_styles_refresh_styles() -> None:
 
 
 def test_use_mindlab_styles_disable() -> None:
-    assert not use_mindlab_styles(project_styles=False)
-
-
-def test_use_mindlab_styles_error() -> None:
-    with raises(ValueError):
-        use_mindlab_styles(project_styles=True)
+    assert not use_mindlab_styles(apply_mindlab_styles=False)
 
 
 def test_invalid_tics() -> None:

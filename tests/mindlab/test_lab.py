@@ -25,6 +25,13 @@ def test_lab(mocker: MockerFixture) -> None:
     assert jupyter_main.called
 
 
+def test_lab_install(mocker: MockerFixture) -> None:
+    jupyter_main = mocker.patch('mindlab.lab.jupyter_main')
+    with raises(SystemExit, match='^0$'):
+        main(args=['--install'])
+    assert not jupyter_main.called
+
+
 def test_lab_error(mocker: MockerFixture) -> None:
     mocker.patch('mindlab.lab.jupyter_main', side_effect=RuntimeError('Test'))
     with raises(SystemExit, match='^Error: Test$'):

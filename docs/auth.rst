@@ -9,9 +9,9 @@ we can simply follow the steps for the appropriate platforms in the :doc:`Authen
 
 Configuration
 -------------
-Note that the authentication configuration can be also added to the ``[tool.mindlab]`` section of
-the project's ``pyproject.toml`` file (instead of or in addition to the ``[tool.stormware]``
-section) as follows:
+Note that the authentication configuration can be also added to the ``tool.mindlab`` section of the
+project's ``pyproject.toml`` file (instead of or in addition to the ``tool.stormware`` section) as
+follows:
 
 .. code-block:: toml
 
@@ -21,3 +21,6 @@ section) as follows:
 
 When a configuration option is set in both the ``mindlab`` and ``stormware`` sections, the value in
 the ``mindlab`` section takes precedence.
+
+Additionally, you can also set the configuration options via environment variables prefixed with
+``MINDLAB`` (e.g. ``MINDLAB_ORGANIZATION``).
