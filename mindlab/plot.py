@@ -1,7 +1,6 @@
 import filecmp
 import shutil
 from io import BytesIO, IOBase
-from os import getenv
 from pathlib import Path
 from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
 
@@ -13,7 +12,7 @@ from pandas import DataFrame, Series
 from pandas.core.groupby.generic import DataFrameGroupBy
 from xdg import xdg_data_home
 
-from mindlab.pyproject import MINDLAB_CONFIG
+from mindlab.utils import get_config
 
 
 def copy_folder(source_dir: Path, target_dir: Path, extension: Optional[str] = None) -> List[Path]:
@@ -33,6 +32,7 @@ def copy_folder(source_dir: Path, target_dir: Path, extension: Optional[str] = N
 def use_mindlab_styles(
     style_install_path: Optional[Path] = None,
     font_install_path: Optional[Path] = None,
+    apply_mindlab_styles: bool = True,
     project_styles: Optional[Union[bool, Iterable[str]]] = None,
 ) -> bool:
     """
@@ -43,20 +43,18 @@ def use_mindlab_styles(
             Defaults to the Matplotlib package style library directory.
         font_install_path: The path to install the style fonts to.
             Defaults to ``$XDG_DATA_HOME/fonts``.
+        apply_mindlab_styles: Whether to use the MindLab styles.
+            Defaults to ``tool.mindlab.apply_mindlab_styles`` in ``pyproject.toml`` or
+            ``$MINDLAB_APPLY_MINDLAB_STYLES``.
         project_styles: The project styles to use in addition to the MindLab style.
-            Defaults to ``tool.mindlab.styles`` in ``pyproject.toml``.
+            Defaults to ``tool.mindlab.styles`` in ``pyproject.toml`` or ``$MINDLAB_STYLES``.
 
     Returns:
         :data:`True` if the styles were applied and :data:`False` otherwise.
 
     """
-    project_styles = (
-        project_styles if project_styles is not None else MINDLAB_CONFIG.get('styles', [])
-    )
-    if project_styles is False or getenv('MINDLAB_USE_STYLES', 'true').lower() in ('false', '0'):
+    if not get_config('apply_mindlab_styles', apply_mindlab_styles):
         return False
-    if not isinstance(project_styles, list):
-        raise ValueError('Project styles can only be `False` or a list of strings')
 
     # Installing fonts and styles
     font_files = copy_folder(
@@ -77,7 +75,7 @@ def use_mindlab_styles(
             font_manager.addfont(str(font_file))
 
     # Refreshing style library if necessary
-    styles = ['mindlab', 'mindlab-light', *project_styles]
+    styles = ['mindlab', 'mindlab-light', *get_config('styles', project_styles, value_type=list)]
     if any(style not in matplotlib.style.available for style in styles):
         style_core = matplotlib.style.core
         base_library = style_core.read_style_directory(style_core.BASE_LIBRARY_PATH)

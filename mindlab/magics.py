@@ -20,8 +20,7 @@ from IPython.display import display
 from stormware.amazon.auth import AWSAuth
 from stormware.google.auth import GCPAuth
 
-from mindlab.pyproject import MINDLAB_CONFIG
-from mindlab.utils import Timer
+from mindlab.utils import MINDLAB_CONFIG, Timer, get_config
 
 argument = cast(Any, argument_untyped)  # pylint: disable=invalid-name
 
@@ -201,20 +200,17 @@ class MindLabMagics(Magics):
     def get_config(
         name: str, value: Optional[str] = None, magic: Optional[str] = None, required: bool = True,
     ) -> Optional[str]:
-        if not value and magic:  # use magic-specific configuration
-            value = MINDLAB_CONFIG.get(f'{magic}_{name}')
-        if not value:  # use general configuration
-            value = MINDLAB_CONFIG.get(name)
-        if required and not value:
-            raise ValueError(f'You must specify "{name}"')
-        return value
+        if not value and magic:
+            value = get_config(f'{magic}_{name}')
+        return value or get_config(name, required=required)
 
     def _gcp_client_arguments(
         self, args: Namespace, magic: str,
     ) -> Dict[str, Union[GCPCredentials, str]]:
-        org = self.get_config('organization', args.organization, magic=magic, required=False)
         auth_args = {
-            'organization': org,
+            'organization': self.get_config(
+                'organization', args.organization, magic=magic, required=False,
+            ),
             'project': self.get_config('project', args.project, magic=magic, required=False),
         }
         return {

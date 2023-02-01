@@ -2,7 +2,7 @@ import os
 import shutil
 import sys
 from pathlib import Path
-from typing import Optional
+from typing import Iterable, Optional
 
 from jupyter_core.command import main as jupyter_main
 
@@ -23,10 +23,14 @@ def install_kernel_config(target_dir: Optional[Path] = None) -> None:
         shutil.copy(src=kernel_config_src, dst=kernel_config_dst)
 
 
-def main() -> None:
+def main(args: Optional[Iterable[str]] = None) -> None:
     install_kernel_config()
+    if '--install' in (args or sys.argv):
+        print('Installation successful')
+        sys.exit(0)
+
     os.environ['JUPYTERLAB_SETTINGS_DIR'] = str(CONFIG_DIR)
-    sys.argv = ['jupyter', 'lab']
+    sys.argv = ['jupyter', 'lab'] + sys.argv[1:]
     try:
         jupyter_main()
         sys.exit(0)

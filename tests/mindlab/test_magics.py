@@ -8,34 +8,17 @@ from botocore import exceptions as aws_exceptions
 from google.cloud.exceptions import BadRequest
 from pandas import DataFrame, Series, read_csv
 from pandas.testing import assert_frame_equal
-from pytest import CaptureFixture, raises
+from pytest import CaptureFixture
 from pytest_mock import MockerFixture
 
 from mindlab.magics import MindLabMagics, load_ipython_extension
-from mindlab.pyproject import MINDLAB_CONFIG
+from mindlab.utils import MINDLAB_CONFIG
 
 
 def test_load_extension(mocker: MockerFixture) -> None:
     ipython = mocker.Mock()
     load_ipython_extension(ipython)
     ipython.register_magics.assert_called_with(MindLabMagics)
-
-
-def test_get_config(mocker: MockerFixture, magics: MindLabMagics) -> None:
-    config = {'config': 'value', 'magic_config': 'magic_value', 'magic_only': 'magic_only_value'}
-    mocker.patch.dict(MINDLAB_CONFIG, config, clear=True)
-
-    assert magics.get_config('config') == 'value'
-    assert magics.get_config('config', 'test') == 'test'
-    assert magics.get_config('config', magic='magic') == 'magic_value'
-    assert magics.get_config('config', 'test', magic='magic') == 'test'
-    assert magics.get_config('non_existent', required=False) is None
-    assert magics.get_config('non_existent', magic='magic', required=False) is None
-    assert magics.get_config('non_existent', 'test') == 'test'
-    assert magics.get_config('non_existent', 'test', magic='magic') == 'test'
-    assert magics.get_config('only', magic='magic') == 'magic_only_value'
-    with raises(ValueError):
-        magics.get_config('non_existent')
 
 
 def test_mindlab_config(
