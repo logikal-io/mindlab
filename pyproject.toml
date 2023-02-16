@@ -12,13 +12,16 @@ authors = [{name = 'Logikal GmbH', email = 'contact@logikal.io'}]
 keywords = ['data', 'jupyterlab', 'spark']
 classifiers = [
   'Development Status :: 5 - Production/Stable',
-  'Framework :: Jupyter :: JupyterLab',
   'Intended Audience :: Science/Research',
   'License :: OSI Approved :: MIT License',
   'Operating System :: POSIX :: Linux',
   'Programming Language :: Python :: 3',
   'Programming Language :: Python :: 3.8',
+  'Framework :: Jupyter :: JupyterLab',
   'Topic :: Scientific/Engineering',
+  'Topic :: Scientific/Engineering :: Visualization',
+  'Topic :: Utilities',
+  'Typing :: Typed',
 ]
 dynamic = ['version', 'dependencies', 'optional-dependencies']
 
