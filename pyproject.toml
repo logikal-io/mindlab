@@ -17,10 +17,10 @@ classifiers = [
   'Operating System :: POSIX :: Linux',
   'Programming Language :: Python :: 3',
   'Programming Language :: Python :: 3.8',
-  'Topic :: Utilities',
+  'Framework :: Jupyter :: JupyterLab',
   'Topic :: Scientific/Engineering',
   'Topic :: Scientific/Engineering :: Visualization',
-  'Framework :: Jupyter :: JupyterLab',
+  'Topic :: Utilities',
   'Typing :: Typed',
 ]
 dynamic = ['version', 'dependencies', 'optional-dependencies']
