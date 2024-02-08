@@ -9,11 +9,7 @@ jobs:
     uses: logikal-io/github-workflows/.github/workflows/publish-release.yml@v5
     with:
       name: mindlab
-      # Note: versions must be mirrored in the test-pull-request.yml workflow
-      hadoop-version: 3.3.6
-      hadoop-gcs-connector-version: 3.0.0
-      hadoop-aws-module-version: 3.3.4
-      aws-java-sdk-version: 1.12.262
+      playbook-roles: hadoop
     permissions:
       contents: read
       id-token: write

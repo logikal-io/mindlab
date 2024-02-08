@@ -6,11 +6,7 @@ jobs:
     name: Run Python tests
     uses: logikal-io/github-workflows/.github/workflows/run-python-tests.yml@v5
     with:
-      # Note: versions must be mirrored in the publish-release.yml workflow
-      hadoop-version: 3.3.6
-      hadoop-gcs-connector-version: 3.0.0
-      hadoop-aws-module-version: 3.3.4
-      aws-java-sdk-version: 1.12.262
+      playbook-roles: hadoop
     permissions:
       contents: read
       id-token: write
