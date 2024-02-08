@@ -18,7 +18,7 @@ def test_use_mindlab_styles_refresh_fonts(mocker: MockerFixture, tmp_path: Path)
 
 
 def test_use_mindlab_styles_refresh_styles() -> None:
-    with raises(OSError, match='\'unavailable\' not found in the style library'):
+    with raises(OSError, match='\'unavailable\' is not a valid .* style'):
         use_mindlab_styles(project_styles=['unavailable'])
 
 
@@ -108,7 +108,7 @@ def test_colors(check_figure: CheckFigure) -> None:
     y_data = [2, 3, 5, 2, 3]
 
     for scheme in ['light', 'dark']:
-        with pyplot.style.context(f'mindlab-{scheme}'):
+        with pyplot.style.context(f'mindlab.styles.mindlab_{scheme}'):
             figure = Figure(
                 title=f'MindLab Matplotlib Colors ({scheme.title()})',
                 xlim=(0.8, 5.8), ylim=(0.5, 13.5), legend='center right',

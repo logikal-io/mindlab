@@ -3,4 +3,4 @@
 -r extras/jupyter.txt
 -r extras/spark.txt
 
-logikal-docs[jupyter]==1.1.3
+logikal-docs[jupyter]==1.1.4

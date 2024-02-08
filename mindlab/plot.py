@@ -15,12 +15,12 @@ from xdg import xdg_data_home
 from mindlab.utils import get_config
 
 
-def copy_folder(source_dir: Path, target_dir: Path, extension: Optional[str] = None) -> List[Path]:
+def copy_folder(source_dir: Path, target_dir: Path) -> List[Path]:
     """
     Copy a given source directory to a target directory and return the paths of the copied files.
     """
     target_files: List[Path] = []
-    for source_file in source_dir.glob(f'*.{extension}' if extension else '*'):
+    for source_file in source_dir.glob('*'):
         target_file = target_dir / source_file.name
         target_files.append(target_file)
         if not target_file.exists() or not filecmp.cmp(source_file, target_file):
@@ -30,7 +30,6 @@ def copy_folder(source_dir: Path, target_dir: Path, extension: Optional[str] = N
 
 
 def use_mindlab_styles(
-    style_install_path: Optional[Path] = None,
     font_install_path: Optional[Path] = None,
     apply_mindlab_styles: bool = True,
     project_styles: Optional[Union[bool, Iterable[str]]] = None,
@@ -39,8 +38,6 @@ def use_mindlab_styles(
     Install and use MindLab and project styles.
 
     Args:
-        style_install_path: The path to install the MindLab styles to.
-            Defaults to the Matplotlib package style library directory.
         font_install_path: The path to install the style fonts to.
             Defaults to ``$XDG_DATA_HOME/fonts``.
         apply_mindlab_styles: Whether to use the MindLab styles.
@@ -58,13 +55,8 @@ def use_mindlab_styles(
 
     # Installing fonts and styles
     font_files = copy_folder(
-        source_dir=Path(__file__).parent / 'config/matplotlib/fonts',
+        source_dir=Path(__file__).parent / 'fonts',
         target_dir=font_install_path or xdg_data_home() / 'fonts',
-    )
-    copy_folder(
-        source_dir=Path(__file__).parent / 'config/matplotlib/styles',
-        target_dir=style_install_path or Path(matplotlib.get_data_path()) / 'stylelib',
-        extension='mplstyle',
     )
 
     # Refreshing font cache if necessary
@@ -74,15 +66,12 @@ def use_mindlab_styles(
         if font_file.suffix == '.ttf' and str(font_file.resolve()) not in font_library:
             font_manager.addfont(str(font_file))
 
-    # Refreshing style library if necessary
-    styles = ['mindlab', 'mindlab-light', *get_config('styles', project_styles, value_type=list)]
-    if any(style not in matplotlib.style.available for style in styles):
-        style_core = matplotlib.style.core
-        base_library = style_core.read_style_directory(style_core.BASE_LIBRARY_PATH)
-        style_core._base_library = base_library  # pylint: disable=protected-access
-        style_core.reload_library()
-
-    matplotlib.style.use(styles)
+    # Applying styles
+    matplotlib.style.use([
+        'mindlab.styles.mindlab',
+        'mindlab.styles.mindlab_light',
+        *get_config('styles', project_styles, value_type=list)
+    ])
     return True
 
 
@@ -91,7 +80,7 @@ use_mindlab_styles()
 
 
 class Figure:
-    def __init__(  # pylint: disable=too-many-arguments
+    def __init__(  # pylint: disable=too-many-arguments, too-complex
         self,
         size: Optional[Tuple[float, float]] = None,
         title: Optional[str] = None,
@@ -239,7 +228,7 @@ class Figure:
                 colorbar = self.figure.colorbar(mappable=mappable, ax=self.axes)
                 colorbar.ax.minorticks_off()
 
-    def bar(self, data: DataFrameGroupBy, **kwargs: Any) -> None:
+    def bar(self, data: DataFrameGroupBy, **kwargs: Any) -> None:  # type: ignore[type-arg]
         """
         Draw a stacked bar chart.
 
@@ -311,7 +300,7 @@ class Figure:
         else:
             raise ValueError(f'Invalid tics setting "{tics}"')
 
-        if tics in ('year', 'month', 'week', 'day') and which == 'x':
+        if tics in {'year', 'month', 'week', 'day'} and which == 'x':
             # Unfortunately axis.set_tick_params does not allow us to set the rotation mode and the
             # horizontal alignment (see https://github.com/matplotlib/matplotlib/issues/13774), so
             # we must use a draw event callback instead.

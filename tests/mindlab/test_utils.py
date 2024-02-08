@@ -3,12 +3,12 @@ from os import environ
 from pytest import raises
 from pytest_mock import MockerFixture
 
-from mindlab.utils import MINDLAB_CONFIG, _missing_extra, get_config
+from mindlab.utils import _missing_extra, get_config, mindlab_config
 
 
 def test_get_config(mocker: MockerFixture) -> None:
     env = {'MINDLAB_CONFIG': 'env_value', 'MINDLAB_ENV_ONLY': 'env_only_value'}
-    mocker.patch.dict(MINDLAB_CONFIG, {'config': 'value'}, clear=True)
+    mocker.patch.dict(mindlab_config, {'config': 'value'}, clear=True)
     mocker.patch.dict(environ, env, clear=True)
 
     assert get_config('config') == 'value'

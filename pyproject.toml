@@ -42,16 +42,15 @@ jupyter = {file = 'requirements/extras/jupyter.txt'}
 spark = {file = 'requirements/extras/spark.txt'}
 
 [tool.setuptools]
-packages = [
-  'mindlab', 'mindlab.config', 'mindlab.config.matplotlib',
-  'mindlab.config.matplotlib.fonts', 'mindlab.config.matplotlib.styles',
-]
+packages = ['mindlab', 'mindlab.config', 'mindlab.fonts', 'mindlab.styles']
 
 [tool.setuptools_scm]
 
+[tool.licenses.extend_allowed_packages]
+jupyter-sphinx = '.*'  # should be removed after updating to jupyter-sphinx >0.5.3
+
 [tool.mindlab]
 organization = 'logikal.io'
-project = 'mindlab'
 athena_region = 'eu-central-1'
 
 [[tool.mypy.overrides]]
@@ -71,8 +70,11 @@ good-names = ['bar']
 [tool.pytest.ini_options]
 norecursedirs = ['build', 'docs/jupyter_execute']
 filterwarnings = [
+  'error',
   # This can be removed when using jupyter_core 6+
   'ignore:Jupyter is migrating its paths.*:DeprecationWarning',
+  # This can be removed when updating pandas
+  'ignore:distutils Version classes are deprecated.*:DeprecationWarning',
 ]
 
 [tool.coverage.report]

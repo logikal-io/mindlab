@@ -15,7 +15,7 @@ def stock_prices(  # pylint: disable=too-many-arguments
     increment_sd: float = 1,
     name_prefix: str = 'RND',
     seed: int = 18,
-) -> DataFrameGroupBy:
+) -> DataFrameGroupBy:  # type: ignore[type-arg]
     """
     Generate mock stock prices.
     """

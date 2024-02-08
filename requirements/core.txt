@@ -1,12 +1,12 @@
 # Packages with external visibility (in magics or plotting)
-awswrangler==2.19.0
-google-cloud-bigquery[pandas,tqdm]==3.4.2
-matplotlib==3.6.3
+awswrangler[redshift]==3.5.2
+google-cloud-bigquery[pandas,tqdm]==3.17.1
+matplotlib==3.7.4  # Python 3.9+ is required for version 3.8+
 # Packages without external visibility (internally used, unlikely to change functionality)
-numpy~=1.23
-pandas~=1.5
-pandas-stubs~=1.5
-scipy~=1.10  # needed for pandas KDE plots
-stormware[google,amazon]~=1.1
-tomli~=2.0
-xdg~=5.1
+logikal-utils~=1.0
+numpy~=1.24  # Python 3.9+ is required for version 1.25+
+pandas~=2.0  # Python 3.9+ is required for version 2.1+
+pandas-stubs~=2.0  # Python 3.9+ is required for version 2.1+
+scipy~=1.10  # needed for pandas KDE plots, Python 3.9+ is required for version 1.11+
+stormware[google,amazon]~=1.2
+xdg~=5.1  # Python 3.10+ is required by xdg-base-dirs, which is the replacement library

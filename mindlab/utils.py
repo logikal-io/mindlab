@@ -1,16 +1,11 @@
 import time
 from functools import partial
 from os import getenv
-from pathlib import Path
 from typing import Any, Callable, Optional
 
-import tomli
+from logikal_utils.project import tool_config
 
-PYPROJECT = (
-    tomli.loads(Path('pyproject.toml').read_text(encoding='utf-8'))
-    if Path('pyproject.toml').exists() else {}
-)
-MINDLAB_CONFIG = PYPROJECT.get('tool', {}).get('mindlab', {})
+mindlab_config = tool_config('mindlab')
 
 
 class Timer:
@@ -40,8 +35,7 @@ def get_config(
     if value is not None:
         return value
 
-    value = MINDLAB_CONFIG.get(name)
-    if value is not None:
+    if (value := mindlab_config.get(name)) is not None:
         return value
 
     value = getenv(f'MINDLAB_{name.upper()}')

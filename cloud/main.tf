@@ -42,7 +42,7 @@ resource "google_storage_bucket_object" "test_data_order_line_items" {
 }
 
 module "s3_test_data_bucket" {
-  providers = { aws = aws.eu_central_1 }
+  providers = {aws = aws.eu_central_1}
   source = "github.com/logikal-io/terraform-modules//aws/s3-bucket?ref=v1.4.1"
 
   name = "test-data"
