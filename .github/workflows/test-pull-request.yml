@@ -8,8 +8,7 @@ jobs:
     with:
       playbook-roles: hadoop
     env:
-      - name: SSL_CERT_DIR
-        value: /etc/ssl/certs
+      SSL_CERT_DIR: /etc/ssl/certs
     permissions:
       contents: read
       id-token: write
