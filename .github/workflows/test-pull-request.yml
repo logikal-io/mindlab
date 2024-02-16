@@ -7,6 +7,9 @@ jobs:
     uses: logikal-io/github-workflows/.github/workflows/run-python-tests.yml@v5
     with:
       playbook-roles: hadoop
+    env:
+      - name: SSL_CERT_DIR
+        value: /etc/ssl/certs
     permissions:
       contents: read
       id-token: write
