@@ -1,43 +1,36 @@
 import os
 from pathlib import Path
-from typing import Dict, Optional
+from typing import Dict
 
 import pandas
 from pandas.testing import assert_frame_equal
-from py4j.protocol import Py4JJavaError  # type: ignore[import]
 from pyspark.sql import SparkSession
-from pytest import mark, param, raises
+from pytest import mark
 from pytest_mock import MockerFixture
 
-from mindlab.spark import lib_jar, spark_session
-
-
-def test_lib_jar(mocker: MockerFixture, tmp_path: Path) -> None:
-    mocker.patch.dict(os.environ, {}, clear=True)
-    with raises(RuntimeError, match='install Hadoop'):
-        lib_jar('test')
-    with raises(RuntimeError, match='install "test"'):
-        lib_jar('test', hadoop_common_libs=tmp_path)
-    for lib_jar_file in ['test-1.jar', 'test-2.jar']:
-        (tmp_path / lib_jar_file).touch()
-    with raises(RuntimeError, match='Multiple library files found'):
-        lib_jar('test', hadoop_common_libs=tmp_path)
+from mindlab.spark import spark_session
 
 
 @mark.parametrize('org_creds, expected_type', [
-    (Path('org_creds'), 'SERVICE_ACCOUNT_JSON_KEYFILE'),
-    (None, 'APPLICATION_DEFAULT'),
+    (True, 'USER_CREDENTIALS'),
+    (False, 'APPLICATION_DEFAULT'),
 ])
 def test_spark_gcs_auth(
-    org_creds: Optional[Path],
+    org_creds: bool,
     expected_type: str,
     mocker: MockerFixture,
 ) -> None:
     mocker.patch('mindlab.spark.SparkSession')
     mocker.patch('mindlab.spark.SparkContext')
+    mocker.patch('mindlab.spark.json.loads', return_value={
+        'client_id': None,
+        'client_secret': None,
+        'refresh_token': None,
+    })
     gateway = mocker.patch('mindlab.spark.launch_gateway')
     gcp_auth = mocker.Mock()
-    gcp_auth.organization_credentials_path.return_value = org_creds
+    if not org_creds:
+        gcp_auth.organization_credentials_path.return_value = None
     spark_session(gcp_auth=gcp_auth)
     conf = gateway.mock_calls[0].kwargs['conf']
     assert conf.get('spark.hadoop.google.cloud.auth.type') == expected_type
@@ -66,17 +59,8 @@ def test_spark_aws_auth(
 # See https://issues.apache.org/jira/browse/SPARK-38659
 @mark.filterwarnings('ignore:unclosed.*socket.*:ResourceWarning')
 @mark.parametrize('data_path', [
-    param(
-        'gs://test-data-mindlab-logikal-io/order_line_items.csv',
-        marks=mark.xfail(
-            # See https://github.com/GoogleCloudDataproc/hadoop-connectors/issues/671
-            # Note: make sure to delete the `pytest-opts: --no-docs` exception from the
-            # test-pull-request workflow once this issue is fixed
-            condition='GITHUB_ACTIONS' in os.environ,
-            reason='auth bug', raises=Py4JJavaError, strict=True,
-        ),
-    ),
-    's3a://test-data-eu-central-1-mindlab-logikal-io/order_line_items/data.csv',
+    'gs://test-data-mindlab-logikal-io/order_line_items.csv',
+    's3://test-data-eu-central-1-mindlab-logikal-io/order_line_items/data.csv',
 ])
 def test_cloud_read(data_path: str, spark: SparkSession) -> None:
     actual: pandas.DataFrame = spark.read.csv(data_path, inferSchema=True, header=True).toPandas()

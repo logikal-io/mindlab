@@ -24,9 +24,9 @@
     :hide-code:
     :hide-output:
 
-    from mindlab.lab import install_kernel_config
+    from mindlab.lab import install_config
 
-    install_kernel_config()
+    install_config()
 
 .. Start a new kernel
 .. jupyter-kernel:: python3
@@ -79,7 +79,6 @@ defaults and auto-completion:
     ...
     [I ... ServerApp] Jupyter Server is running at:
     [I ... ServerApp] http://localhost:8888/lab?token={token}
-    [I ... ServerApp]  or http://127.0.0.1:8888/lab?token={token}
 
 Executing queries against various data sources is extremely simple using the provided :ref:`MindLab
 Magics <magics:Magics>` (after :ref:`authentication <auth:Authentication>`):
@@ -87,9 +86,10 @@ Magics <magics:Magics>` (after :ref:`authentication <auth:Authentication>`):
 .. jupyter-execute::
 
     %%bigquery
-    SELECT title, `by` AS author, DATETIME(time_ts) AS posted_at, score
-    FROM bigquery-public-data.hacker_news.stories
-    ORDER BY time_ts NULLS LAST
+    SELECT title, `by` AS author, DATETIME(`timestamp`) AS posted_at, score
+    FROM bigquery-public-data.hacker_news.full
+    WHERE type = 'story'
+    ORDER BY timestamp NULLS LAST
     LIMIT 3
 
 Of course, true power lies in combining the magics with MindLab's plotting capabilities:
@@ -97,10 +97,10 @@ Of course, true power lies in combining the magics with MindLab's plotting capab
 .. jupyter-execute::
 
     %%bigquery scores
-    SELECT score, COUNT(*) AS frequency, EXTRACT(YEAR FROM time_ts) as `year`
-    FROM bigquery-public-data.hacker_news.stories
-    WHERE time_ts >= TIMESTAMP '2007-01-01' AND time_ts < TIMESTAMP '2015-01-01'
-          AND score IS NOT NULL
+    SELECT score, COUNT(*) AS frequency, EXTRACT(YEAR FROM `timestamp`) as `year`
+    FROM bigquery-public-data.hacker_news.full
+    WHERE type = 'story' AND score IS NOT NULL
+          AND `timestamp` >= TIMESTAMP '2007-01-01' AND `timestamp` < TIMESTAMP '2015-01-01'
     GROUP BY score, `year`
 
 .. jupyter-execute::

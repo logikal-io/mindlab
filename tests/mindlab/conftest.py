@@ -33,7 +33,7 @@ def check_figure(tmp_path: Path) -> CheckFigure:
     return check_figure_wrapper
 
 
-@fixture
+@fixture(scope='session')
 def spark() -> Iterator[SparkSession]:
     with spark_session() as session:
         yield session

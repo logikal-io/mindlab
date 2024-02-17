@@ -9,27 +9,35 @@ from jupyter_core.command import main as jupyter_main
 CONFIG_DIR = Path(__file__).parent / 'config'
 
 
-def install_kernel_config(target_dir: Optional[Path] = None) -> None:
-    if not target_dir and 'VIRTUAL_ENV' not in os.environ:
+def install_config(virtual_env_dir: Optional[Path] = None, force: bool = False) -> None:
+    if not virtual_env_dir and 'VIRTUAL_ENV' not in os.environ:
         raise RuntimeError('You must run this command in a virtual environment')
 
-    target_dir = target_dir or Path(os.environ['VIRTUAL_ENV']) / 'etc/ipython'
+    virtual_env_dir = virtual_env_dir or Path(os.environ['VIRTUAL_ENV'])
+    config = {
+        'IPython kernel configuration': {
+            'source': CONFIG_DIR / 'ipython_kernel_config.py',
+            'destination': virtual_env_dir / 'etc/ipython/ipython_kernel_config.py',
+        },
+        'JupyterLab default settings overrides': {
+            'source': CONFIG_DIR / 'jupyterlab_settings_overrides.json',
+            'destination': virtual_env_dir / 'share/jupyter/lab/settings/overrides.json',
+        },
+    }
 
-    kernel_config_src = CONFIG_DIR / 'ipython_kernel_config.py'
-    kernel_config_dst = target_dir / kernel_config_src.name
-    if not kernel_config_dst.exists():
-        print(f'Installing IPython kernel configuration at "{kernel_config_dst}"')
-        kernel_config_dst.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy(src=kernel_config_src, dst=kernel_config_dst)
+    for name, paths in config.items():
+        if force or not paths['destination'].exists():
+            print(f'Installing {name} at "{paths["destination"]}')
+            paths['destination'].parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy(src=paths['source'], dst=paths['destination'])
 
 
 def main(args: Optional[Iterable[str]] = None) -> None:
-    install_kernel_config()
+    install_config()
     if '--install' in (args or sys.argv):
         print('Installation successful')
         sys.exit(0)
 
-    os.environ['JUPYTERLAB_SETTINGS_DIR'] = str(CONFIG_DIR)
     sys.argv = ['jupyter', 'lab'] + sys.argv[1:]
     try:
         jupyter_main()

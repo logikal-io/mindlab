@@ -20,7 +20,7 @@ from IPython.display import display
 from stormware.amazon.auth import AWSAuth
 from stormware.google.auth import GCPAuth
 
-from mindlab.utils import MINDLAB_CONFIG, Timer, get_config
+from mindlab.utils import Timer, get_config, mindlab_config
 
 argument = cast(Any, argument_untyped)  # pylint: disable=invalid-name
 
@@ -72,11 +72,11 @@ class MindLabMagics(Magics):
         """
         args = parse_argstring(self.mindlab_config, line)
         if not args.name:
-            print(MINDLAB_CONFIG)
+            print(mindlab_config)
         elif not args.value:
-            print(MINDLAB_CONFIG.get(args.name))
+            print(mindlab_config.get(args.name))
         else:
-            MINDLAB_CONFIG[args.name] = args.value
+            mindlab_config[args.name] = args.value
 
     @no_type_check
     @common_gcp_arguments

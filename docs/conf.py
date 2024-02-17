@@ -6,7 +6,8 @@ from typing import Any, List, Tuple, cast
 from IPython.core.magic import Magics
 from sphinx import addnodes, domains
 from sphinx.application import Sphinx
-from sphinx.ext.autodoc import Documenter
+from sphinx.environment import BuildEnvironment
+from sphinx.ext.autodoc import Documenter, ObjectMembers
 from sphinx.ext.autodoc.importer import get_class_members
 from sphinx.roles import XRefRole
 
@@ -48,6 +49,12 @@ class MagicsDocumenter(Documenter):
     ) -> Tuple[str, List[str]]:
         return modname or path.rstrip('.'), parents + [base]
 
+    def get_object_members(self, want_all: bool) -> Tuple[bool, ObjectMembers]:
+        return False, list(get_class_members(
+            subject=self.object, objpath=self.objpath, attrgetter=self.get_attr,
+            inherit_docstrings=False,
+        ).values())
+
     def _document_magic(self, magic: Any, magic_type: str) -> None:
         lines: List[str] = []
 
@@ -58,18 +65,16 @@ class MagicsDocumenter(Documenter):
 
         # Description
         for line in magic.parser.description.strip().splitlines():
-            line = line.strip()
-            lines.append((2 * ' ' if line else '') + line)
+            clean_line = line.strip()
+            lines.append((2 * ' ' if clean_line else '') + clean_line)
 
         # Arguments
-        actions = magic.parser._get_positional_actions()  # pylint: disable=protected-access
-        if actions:
+        if actions := magic.parser._get_positional_actions():  # pylint: disable=protected-access
             lines.extend(['', 2 * ' ' + '.. describe:: Positional arguments:', ''])
             for action in actions:
                 lines.extend([4 * ' ' + action.dest, 6 * ' ' + action.help])
 
-        actions = magic.parser._get_optional_actions()  # pylint: disable=protected-access
-        if actions:
+        if actions := magic.parser._get_optional_actions():  # pylint: disable=protected-access
             lines.extend(['', 2 * ' ' + '.. describe:: Named arguments:', ''])
             for action in actions:
                 lines.extend([4 * ' ' + ', '.join(action.option_strings), 6 * ' ' + action.help])
@@ -83,12 +88,9 @@ class MagicsDocumenter(Documenter):
         self.parse_name()
         self.import_object()
 
-        members = get_class_members(
-            subject=self.object, objpath=self.objpath, attrgetter=self.get_attr,
-            inherit_docstrings=False,
-        )
+        members = self.get_object_members(want_all=True)[1]
         for magic_type in ['line', 'cell']:
-            for member_name, member in members.values():
+            for member_name, member in members:
                 if member_name in self.object.magics[magic_type]:
                     self._document_magic(magic=member, magic_type=magic_type)
 
@@ -112,13 +114,12 @@ def setup(app: Sphinx) -> None:
             return ''
 
         @classmethod
-        def parse_node(
+        def parse_node(  # type: ignore[override]
             cls,
-            env: Any,  # pylint: disable=unused-argument
+            env: BuildEnvironment,  # pylint: disable=unused-argument
             sig: str, signode: addnodes.desc_signature,
         ) -> str:
-            magic = re.search(r'%([\w_]+)(.*)', sig)
-            if not magic:
+            if not (magic := re.search(r'%([\w_]+)(.*)', sig)):
                 raise RuntimeError(f'Invalid magic command "{sig}"')
             name = magic.group(1)
             signode += addnodes.desc_sig_operator(cls.magic_prefix, cls.magic_prefix)

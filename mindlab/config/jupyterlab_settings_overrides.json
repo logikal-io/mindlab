@@ -1,0 +1,344 @@
+{
+  "@jupyterlab/apputils-extension:notification": {
+    "checkForUpdates": false,
+    "fetchNews": "false"
+  },
+  "@jupyterlab/apputils-extension:themes": {
+    "theme": "JupyterLab Light",
+    "theme-scrollbars": true
+  },
+  "@jupyterlab/cell-toolbar-extension:plugin": {
+    "toolbar": []
+  },
+  "@jupyterlab/console-extension:tracker": {
+    "promptCellConfig": {
+      "lineNumbers": false,
+      "rulers": [99]
+    }
+  },
+  "@jupyterlab/extensionmanager-extension:plugin": {
+    "enabled": false
+  },
+  "@jupyterlab/fileeditor-extension:plugin": {
+    "editorConfig": {
+      "highlightTrailingWhitespace": true,
+      "rulers": [99]
+    }
+  },
+  "@jupyterlab/completer-extension:manager": {
+    "availableProviders": {
+      "CompletionProvider:context": -1,
+      "CompletionProvider:kernel": -1,
+      "lsp": 1000
+    },
+    "providerTimeout": 1000,
+    "showDocumentationPanel": false,
+    "autoCompletion": true
+  },
+  "@jupyterlab/notebook-extension:tracker": {
+    "codeCellConfig": {
+        "lineNumbers": false,
+        "lineWrap": true,
+        "matchBrackets": true,
+        "rulers": [99]
+    },
+    "markdownCellConfig": {
+        "lineNumbers": false,
+        "lineWrap": true,
+        "matchBrackets": false,
+        "rulers": [99]
+    },
+    "rawCellConfig": {
+        "lineNumbers": false,
+        "lineWrap": true,
+        "matchBrackets": false,
+        "rulers": [99]
+    }
+  },
+  "@jupyter-widgets/jupyterlab-manager:plugin": {
+    "saveState": true
+  },
+  "@jupyter-lsp/jupyterlab-lsp:completion": {
+    "continuousHinting": true,
+    "suppressContinuousHintingIn": [],
+    "suppressTriggerCharacterIn": [],
+    "waitForBusyKernel": false,
+    "kernelCompletionsFirst": false,
+    "layout": "detail-below",
+    "disable": false
+  },
+  "@jupyter-lsp/jupyterlab-lsp:highlights": {
+    "removeOnBlur": true
+  },
+  "@jupyter-lsp/jupyterlab-lsp:jump_to": {
+    "disable": true
+  },
+  "@jupyter-lsp/jupyterlab-lsp:plugin": {
+    "language_servers": {
+        "pylsp": {
+            "priority": 50,
+            "serverSettings": {
+                "pylsp.plugins.flake8.enabled": false,
+                "pylsp.plugins.jedi_completion.fuzzy": true,
+                "pylsp.plugins.mccabe.enabled": false,
+                "pylsp.plugins.preload.enabled": true,
+                "pylsp.plugins.pycodestyle.enabled": true,
+                "pylsp.plugins.pycodestyle.ignore": ["E133", "E402", "W391", "W503"],
+                "pylsp.plugins.pycodestyle.maxLineLength": 99,
+                "pylsp.plugins.pydocstyle.enabled": false,
+                "pylsp.plugins.pyflakes.enabled": false,
+                "pylsp.plugins.pylint.enabled": false,
+                "pylsp.plugins.rope_completion.enabled": false,
+                "pylsp.plugins.yapf.enabled": false
+            }
+        }
+    }
+  },
+  "@jupyterlab/shortcuts-extension:shortcuts": {
+    "shortcuts": [
+      {
+        "command": "application:activate-next-tab",
+        "selector": "body",
+        "keys": ["Ctrl Shift ]"],
+        "disabled": true
+      },
+      {
+        "command": "application:activate-next-tab",
+        "selector": "body",
+        "keys": ["Ctrl ]"]
+      },
+      {
+        "command": "application:activate-next-tab",
+        "selector": "body",
+        "keys": ["Alt ]"]
+      },
+      {
+        "command": "application:activate-previous-tab",
+        "selector": "body",
+        "keys": ["Ctrl Shift ["],
+        "disabled": true
+      },
+      {
+        "command": "application:activate-previous-tab",
+        "selector": "body",
+        "keys": ["Ctrl ["]
+      },
+      {
+        "command": "application:activate-previous-tab",
+        "selector": "body",
+        "keys": ["Alt ["]
+      },
+      {
+        "command": "application:toggle-left-area",
+        "selector": "body",
+        "keys": ["Alt H"]
+      },
+      {
+        "command": "launcher:create",
+        "keys": ["Accel Shift L"],
+        "selector": "body",
+        "disabled": true
+      },
+      {
+        "command": "launcher:create",
+        "selector": "body",
+        "keys": ["Alt L"]
+      },
+      {
+        "command": "runmenu:restart-and-run-all",
+        "keys": ["Alt A"],
+        "selector": "[data-jp-code-runner]"
+      },
+      {
+        "command": "kernelmenu:interrupt",
+        "keys": ["I", "I"],
+        "selector": "[data-jp-kernel-user] :focus:not(:read-write)",
+        "disabled": true
+      },
+      {
+        "command": "kernelmenu:interrupt",
+        "keys": ["Accel X"],
+        "selector": "[data-jp-kernel-user] :focus:not(:read-write)"
+      },
+      {
+        "command": "kernelmenu:restart",
+        "keys": ["0", "0"],
+        "selector": "[data-jp-kernel-user] :focus:not(:read-write)",
+        "disabled": true
+      },
+      {
+        "command": "kernelmenu:restart",
+        "keys": ["Alt R"],
+        "selector": "[data-jp-kernel-user] :focus:not(:read-write)"
+      },
+      {
+        "command": "notebook:cut-cell",
+        "keys": ["D", "D"],
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)"
+      },
+      {
+        "command": "notebook:copy-cell",
+        "keys": ["C"],
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)",
+        "disabled": true
+      },
+      {
+        "command": "notebook:copy-cell",
+        "keys": ["Y"],
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)"
+      },
+      {
+        "command": "notebook:paste-cell-below",
+        "keys": ["V"],
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)",
+        "disabled": true
+      },
+      {
+        "command": "notebook:paste-cell-below",
+        "keys": ["P"],
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)"
+      },
+      {
+        "command": "notebook:paste-cell-above",
+        "keys": ["Shift P"],
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)"
+      },
+      {
+        "command": "notebook:merge-cells",
+        "keys": ["Shift M"],
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)",
+        "disabled": true
+      },
+      {
+        "command": "notebook:extend-marked-cells-below",
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)",
+        "keys": ["Shift J"],
+        "disabled": true
+      },
+      {
+        "command": "notebook:merge-cells",
+        "keys": ["Shift J"],
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)"
+      },
+      {
+        "command": "notebook:move-cell-up",
+        "keys": ["Shift PageUp"],
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)"
+      },
+      {
+        "command": "notebook:move-cell-down",
+        "keys": ["Shift PageDown"],
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)"
+      },
+      {
+        "command": "notebook:change-cell-to-code",
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)",
+        "keys": ["Y"],
+        "disabled": true
+      },
+      {
+        "command": "notebook:change-cell-to-code",
+        "keys": ["C"],
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)"
+      },
+      {
+        "command": "notebook:change-cell-to-code",
+        "keys": ["O"],
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)"
+      },
+      {
+        "command": "notebook:delete-cell",
+        "keys": ["D", "D"],
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)",
+        "disabled": true
+      },
+      {
+        "command": "notebook:enter-edit-mode",
+        "keys": ["I"],
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)"
+      },
+      {
+        "command": "notebook:undo-cell-action",
+        "keys": ["Z"],
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)",
+        "disabled": true
+      },
+      {
+        "command": "notebook:undo-cell-action",
+        "keys": ["U"],
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)"
+      },
+      {
+        "command": "notebook:redo-cell-action",
+        "keys": ["Shift Z"],
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)",
+        "disabled": true
+      },
+      {
+        "command": "notebook:redo-cell-action",
+        "keys": ["Shift U"],
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)"
+      },
+      {
+        "command": "notebook:hide-cell-outputs",
+        "keys": ["H"],
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)"
+      },
+      {
+        "command": "notebook:show-cell-outputs",
+        "keys": ["S"],
+        "selector": ".jp-Notebook.jp-mod-commandMode :focus:not(:read-write)"
+      },
+      {
+        "command": "completer:select-notebook",
+        "keys": ["Tab"],
+        "selector": ".jp-Notebook.jp-mod-editMode .jp-mod-completer-enabled"
+      },
+      {
+        "command": "completer:invoke-notebook",
+        "keys": ["Tab"],
+        "selector": ".jp-Notebook.jp-mod-editMode .jp-mod-completer-enabled",
+        "disabled": true
+      },
+      {
+        "command": "completer:invoke-notebook",
+        "keys": ["Ctrl X"],
+        "selector": ".jp-Notebook.jp-mod-editMode .jp-mod-completer-enabled"
+      },
+      {
+        "command": "lsp:jump-to-definition",
+        "selector": ".jp-FileEditor",
+        "keys": ["Ctrl B"],
+        "disabled": true
+      },
+      {
+        "command": "lsp:jump-to-definition",
+        "selector": ".jp-FileEditor",
+        "keys": ["Alt G"]
+      },
+      {
+        "command": "lsp:jump-to-definition",
+        "selector": ".jp-Notebook .jp-CodeCell",
+        "keys": ["Ctrl B"],
+        "disabled": true
+      },
+      {
+        "command": "lsp:jump-to-definition",
+        "selector": ".jp-Notebook .jp-CodeCell",
+        "keys": ["Alt G"]
+      },
+      {
+        "command": "inline-completer:next",
+        "selector": ".jp-mod-completer-enabled",
+        "keys": ["Alt ]"],
+        "disabled": true
+      },
+      {
+        "command": "inline-completer:previous",
+        "selector": ".jp-mod-completer-enabled",
+        "keys": ["Alt ["],
+        "disabled": true
+      }
+    ]
+  }
+}

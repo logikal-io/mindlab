@@ -5,11 +5,11 @@ locals {
 
   providers = {
     google = {
-      version = "~> 4.44"
+      version = "~> 5.9"
       region = "europe-west6"
     }
     aws = {
-      version = "~> 4.41"
+      version = "~> 5.35"
       region = "eu-central-2"
     }
   }
