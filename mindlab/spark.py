@@ -71,6 +71,7 @@ def spark_session(
     conf.set('spark.sql.orc.splits.include.file.footer', 'true')
     conf.set('spark.sql.orc.cache.stripe.details.size', '10000')
     conf.set('spark.sql.hive.metastorePartitionPruning', 'true')
+    conf.set('spark.driver.extraJavaOptions', '-Djavax.net.debug=ssl')
 
     # Redirect Spark standard error to standard output to avoid log messages breaking things
     popen_kwargs = {'stderr': subprocess.STDOUT}
