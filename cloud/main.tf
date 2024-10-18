@@ -41,6 +41,14 @@ resource "google_storage_bucket_object" "test_data_order_line_items" {
   source = "${var.terragrunt_dir}/../tests/mindlab/data/order_line_items.csv"
 }
 
+# TODO: remove this again
+resource "google_storage_object_access_control" "public_test_data_order_line_items" {
+  object = google_storage_bucket_object.test_data_order_line_items.output_name
+  bucket = module.gcs_test_data_bucket.name
+  role = "READER"
+  entity = "allUsers"
+}
+
 module "s3_test_data_bucket" {
   providers = {aws = aws.eu_central_1}
   source = "github.com/logikal-io/terraform-modules//aws/s3-bucket?ref=v1.12.6"
