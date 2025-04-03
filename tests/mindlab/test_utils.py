@@ -3,7 +3,7 @@ from os import environ
 from pytest import raises
 from pytest_mock import MockerFixture
 
-from mindlab.utils import _missing_extra, get_config, mindlab_config
+from mindlab.utils import get_config, mindlab_config
 
 
 def test_get_config(mocker: MockerFixture) -> None:
@@ -19,8 +19,3 @@ def test_get_config(mocker: MockerFixture) -> None:
     assert get_config('non_existent', 'test') == 'test'
     with raises(ValueError):
         get_config('non_existent', required=True)
-
-
-def test_missing_extra() -> None:
-    with raises(ImportError, match='You must install the `test` extra'):
-        _missing_extra('test')(some_argument='works')

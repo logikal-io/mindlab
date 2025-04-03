@@ -7,7 +7,6 @@
     auth
     plotting
     magics
-    spark
     development
     license
 
@@ -110,30 +109,3 @@ Of course, true power lies in combining the magics with MindLab's plotting capab
         xlabel='Score', ylabel='Frequency', xscale='log', yscale='log',
     )
     figure.scatter(scores.groupby('year'), cmap='viridis', alpha=0.5)
-
-Spark
------
-MindLab also provides `Spark <https://spark.apache.org/docs/latest/>`_ support (via `PySpark
-<https://spark.apache.org/docs/latest/api/python/>`_) when installed with the ``spark`` extra:
-
-.. code-block:: shell
-
-    pip install mindlab[spark]
-
-This allows you to execute Spark queries locally, even if your data set is located in cloud
-storage:
-
-.. jupyter-execute::
-    :hide-output:
-
-    from mindlab import spark_session
-
-    with spark_session() as spark:
-        path = 'gs://test-data-mindlab-logikal-io/order_line_items.csv'
-        data = spark.read.csv(path, inferSchema=True, header=True).toPandas()
-
-.. jupyter-execute::
-
-    data.head()
-
-For more information check out the :ref:`spark:Spark` section of the documentation.

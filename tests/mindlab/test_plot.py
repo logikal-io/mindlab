@@ -33,7 +33,7 @@ def test_invalid_tics() -> None:
 
 def test_boxplot(check_figure: CheckFigure) -> None:
     figure = Figure(xlabel='Sets', ylabel='Values', title='Title')
-    figure.boxplot([[1, 2, 3, 4, 6], [1, 2, 3, 3, 5, 8]], labels=['set-1', 'set-2'])
+    figure.boxplot([[1, 2, 3, 4, 6], [1, 2, 3, 3, 5, 8]], tick_labels=['set-1', 'set-2'])
     check_figure(figure, 'boxplot.png')
 
 

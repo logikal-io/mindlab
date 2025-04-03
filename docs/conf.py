@@ -1,13 +1,13 @@
 import re
 import sys
 from importlib.metadata import version as pkg_version
-from typing import Any, List, Tuple, cast
+from typing import Any, cast
 
 from IPython.core.magic import Magics
 from sphinx import addnodes, domains
 from sphinx.application import Sphinx
 from sphinx.environment import BuildEnvironment
-from sphinx.ext.autodoc import Documenter, ObjectMembers
+from sphinx.ext.autodoc import Documenter, ObjectMember
 from sphinx.ext.autodoc.importer import get_class_members
 from sphinx.roles import XRefRole
 
@@ -19,14 +19,12 @@ extensions = [
 ]
 intersphinx_mapping = {
     'python': (f'https://docs.python.org/{sys.version_info[0]}.{sys.version_info[1]}', None),
-    'pandas': (f'https://pandas.pydata.org/pandas-docs/version/{pkg_version("pandas")}', None),
-    'matplotlib': (f'https://matplotlib.org/{pkg_version("matplotlib")}/', None),
-    'pyspark': (f'https://spark.apache.org/docs/{pkg_version("pyspark")}/api/python/', None),
-    'stormware': (f'https://docs.logikal.io/stormware/{pkg_version("stormware")}/', None),
+    'pandas': (f'https://pandas.pydata.org/pandas-docs/version/{pkg_version('pandas')}', None),
+    'matplotlib': (f'https://matplotlib.org/{pkg_version('matplotlib')}/', None),
+    'stormware': (f'https://docs.logikal.io/stormware/{pkg_version('stormware')}/', None),
 }
 nitpick_ignore = [
     ('py:class', 'pandas.core.groupby.generic.DataFrameGroupBy'),
-    ('py:class', 'pyspark.sql.session.SparkSession'),
 ]
 
 
@@ -35,7 +33,6 @@ class MagicsDocumenter(Documenter):
     Documenter subclass for magics classes.
     """
     objtype = 'magics'
-    titles_allowed = True
 
     @classmethod
     def can_document_member(cls, member: Any, membername: str, isattr: bool, parent: Any) -> bool:
@@ -45,18 +42,19 @@ class MagicsDocumenter(Documenter):
         )
 
     def resolve_name(
-        self, modname: str, parents: Any, path: str, base: Any,
-    ) -> Tuple[str, List[str]]:
+        self, modname: str | None, parents: Any, path: str, base: str
+    ) -> tuple[str | None, list[str]]:
         return modname or path.rstrip('.'), parents + [base]
 
-    def get_object_members(self, want_all: bool) -> Tuple[bool, ObjectMembers]:
-        return False, list(get_class_members(
+    def get_object_members(self, want_all: bool) -> tuple[bool, list[ObjectMember]]:
+        members = get_class_members(
             subject=self.object, objpath=self.objpath, attrgetter=self.get_attr,
             inherit_docstrings=False,
-        ).values())
+        )
+        return False, list(members.values())
 
     def _document_magic(self, magic: Any, magic_type: str) -> None:
-        lines: List[str] = []
+        lines: list[str] = []
 
         # Usage
         usage = magic.parser.format_usage().lstrip('::').strip()
@@ -90,9 +88,9 @@ class MagicsDocumenter(Documenter):
 
         members = self.get_object_members(want_all=True)[1]
         for magic_type in ['line', 'cell']:
-            for member_name, member in members:
-                if member_name in self.object.magics[magic_type]:
-                    self._document_magic(magic=member, magic_type=magic_type)
+            for member in members:
+                if member.__name__ in self.object.magics[magic_type]:
+                    self._document_magic(magic=member.object, magic_type=magic_type)
 
 
 def setup(app: Sphinx) -> None:
@@ -103,7 +101,7 @@ def setup(app: Sphinx) -> None:
         magic_prefix = '%'
         indextemplate = 'pair: %s; linemagic'
 
-        def _object_hierarchy_parts(self, sig_node: addnodes.desc_signature) -> Tuple[str, ...]:
+        def _object_hierarchy_parts(self, sig_node: addnodes.desc_signature) -> tuple[str, ...]:
             name_index = sig_node.first_child_matching_class(addnodes.desc_name)
             name = cast(str, sig_node[name_index].rawsource)
             return (name, ) if name_index is not None else ()
@@ -114,7 +112,7 @@ def setup(app: Sphinx) -> None:
             return ''
 
         @classmethod
-        def parse_node(  # type: ignore[override]
+        def parse_node(
             cls,
             env: BuildEnvironment,  # pylint: disable=unused-argument
             sig: str, signode: addnodes.desc_signature,

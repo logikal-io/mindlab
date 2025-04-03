@@ -1,15 +1,15 @@
 import os
 import shutil
 import sys
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable, Optional
 
 from jupyter_core.command import main as jupyter_main
 
 CONFIG_DIR = Path(__file__).parent / 'config'
 
 
-def install_config(virtual_env_dir: Optional[Path] = None, force: bool = False) -> None:
+def install_config(virtual_env_dir: Path | None = None, force: bool = False) -> None:
     if not virtual_env_dir and 'VIRTUAL_ENV' not in os.environ:
         raise RuntimeError('You must run this command in a virtual environment')
 
@@ -32,7 +32,7 @@ def install_config(virtual_env_dir: Optional[Path] = None, force: bool = False) 
             shutil.copy(src=paths['source'], dst=paths['destination'])
 
 
-def main(args: Optional[Iterable[str]] = None) -> None:
+def main(args: Iterable[str] | None = None) -> None:
     install_config()
     if '--install' in (args or sys.argv):
         print('Installation successful')

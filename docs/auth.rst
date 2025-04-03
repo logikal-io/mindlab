@@ -1,7 +1,7 @@
 Authentication
 ==============
 .. note:: You must be authenticated towards the appropriate cloud provider for :ref:`magics:Magics`
-    and the :ref:`spark:Spark` cloud storage connectors to function properly.
+    to function properly.
 
 MindLab uses `Stormware <https://docs.logikal.io/stormware/latest/>`_ for authentication, therefore
 we can simply follow the steps for the appropriate platforms in the :doc:`Authentication section

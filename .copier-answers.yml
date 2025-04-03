@@ -15,12 +15,10 @@ cloud: true
 description: Data science toolbox
 extras:
 - jupyter
-- spark
 jupyter: true
 keywords:
 - data
 - jupyterlab
-- spark
 license: mit
 name: mindlab
 scripts: []

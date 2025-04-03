@@ -1,22 +1,21 @@
 [build-system]
-requires = ['setuptools>=45', 'setuptools-scm[toml]>=6.2']
+requires = ['setuptools>=64', 'setuptools-scm>=8']
 build-backend = 'setuptools.build_meta'
 
 [project]
 name = 'mindlab'
 description = 'Data science toolbox'
 readme = 'README.rst'
-requires-python = '~= 3.8'
-license = {file = 'LICENSE.txt'}
+requires-python = '~= 3.12'
+license = 'MIT'
 authors = [{name = 'Logikal GmbH', email = 'contact@logikal.io'}]
-keywords = ['data', 'jupyterlab', 'spark']
+keywords = ['data', 'jupyterlab']
 classifiers = [
   'Development Status :: 5 - Production/Stable',
   'Intended Audience :: Science/Research',
-  'License :: OSI Approved :: MIT License',
   'Operating System :: POSIX :: Linux',
   'Programming Language :: Python :: 3',
-  'Programming Language :: Python :: 3.8',
+  'Programming Language :: Python :: 3.12',
   'Framework :: Jupyter :: JupyterLab',
   'Topic :: Scientific/Engineering',
   'Topic :: Scientific/Engineering :: Visualization',
@@ -39,19 +38,24 @@ dependencies = {file = 'requirements/core.txt'}
 
 [tool.setuptools.dynamic.optional-dependencies]
 jupyter = {file = 'requirements/extras/jupyter.txt'}
-spark = {file = 'requirements/extras/spark.txt'}
 
 [tool.setuptools]
 packages = ['mindlab', 'mindlab.config', 'mindlab.fonts', 'mindlab.styles']
 
 [tool.setuptools_scm]
 
-[tool.licenses.extend_allowed_packages]
-jupyter-sphinx = '.*'  # should be removed after updating to jupyter-sphinx >0.5.3
+[tool.browser.versions]
+chrome = '132.0.6834.83'
 
 [tool.mindlab]
 organization = 'logikal.io'
 athena_region = 'eu-central-1'
+
+[tool.licenses.extend_allowed_legacy_packages]
+jupyter-sphinx = 'any'  # should be removed after updating to jupyter-sphinx >0.5.3
+
+[tool.mypy]
+untyped_calls_exclude = ['matplotlib']
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
@@ -73,10 +77,9 @@ filterwarnings = [
   'error',
   # This can be removed when using jupyter_core 6+
   'ignore:Jupyter is migrating its paths.*:DeprecationWarning',
-  # This can be removed when updating pandas
-  'ignore:distutils Version classes are deprecated.*:DeprecationWarning',
+  # See https://github.com/boto/boto3/issues/3889
+  'ignore:datetime.datetime.utcnow:DeprecationWarning',
 ]
 
 [tool.coverage.report]
 omit = ['docs/conf.py']  # being run in a subthread during documentation building
-exclude_lines = ['except ImportError:', '= _missing_extra\([^)]+\)']  # extras

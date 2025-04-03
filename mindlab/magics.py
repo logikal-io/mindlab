@@ -1,7 +1,7 @@
 import sys
 from argparse import Namespace
 from functools import reduce
-from typing import Any, Dict, List, Optional, Union, cast, no_type_check
+from typing import Any, cast, no_type_check
 
 import awswrangler
 import ipywidgets
@@ -81,7 +81,7 @@ class MindLabMagics(Magics):
     @no_type_check
     @common_gcp_arguments
     @cell_magic
-    def bigquery(self, line: str, cell: str) -> Optional[pd.DataFrame]:
+    def bigquery(self, line: str, cell: str) -> pd.DataFrame | None:
         """
         Run a Google BigQuery query.
         """
@@ -114,7 +114,7 @@ class MindLabMagics(Magics):
     @argument('-d', '--database', default='default', help='The database to use')
     @argument('-w', '--workgroup', default='primary', help='The workgroup to use')
     @cell_magic
-    def athena(self, line: str, cell: str) -> Optional[pd.DataFrame]:
+    def athena(self, line: str, cell: str) -> pd.DataFrame | None:
         """
         Run an Amazon Athena query.
         """
@@ -167,7 +167,7 @@ class MindLabMagics(Magics):
     @common_aws_arguments
     @argument('-c', '--connection', help='The Glue connection to use')
     @cell_magic
-    def redshift(self, line: str, cell: str) -> Optional[pd.DataFrame]:
+    def redshift(self, line: str, cell: str) -> pd.DataFrame | None:
         """
         Run an Amazon Redshift query.
         """
@@ -198,15 +198,15 @@ class MindLabMagics(Magics):
 
     @staticmethod
     def get_config(
-        name: str, value: Optional[str] = None, magic: Optional[str] = None, required: bool = True,
-    ) -> Optional[str]:
+        name: str, value: str | None = None, magic: str | None = None, required: bool = True,
+    ) -> str | None:
         if not value and magic:
             value = get_config(f'{magic}_{name}')
         return value or get_config(name, required=required)
 
     def _gcp_client_arguments(
         self, args: Namespace, magic: str,
-    ) -> Dict[str, Union[GCPCredentials, str]]:
+    ) -> dict[str, GCPCredentials | str]:
         auth_args = {
             'organization': self.get_config(
                 'organization', args.organization, magic=magic, required=False,
@@ -228,8 +228,8 @@ class MindLabMagics(Magics):
     @staticmethod
     def _display_query_details(
         total_time_ms: float,
-        timing_info: Optional[str] = None,
-        details: Optional[List[str]] = None,
+        timing_info: str | None = None,
+        details: list[str] | None = None,
     ) -> None:
         timing_info = f' ({timing_info})' if timing_info else ''
         display(ipywidgets.HTML(value='<br>'.join([  # type: ignore[no-untyped-call]
@@ -238,7 +238,7 @@ class MindLabMagics(Magics):
             f'Total time: <b>{total_time_ms:,.0f} ms{timing_info}</b>',
         ])))
 
-    def _cell_magic_data(self, data: pd.DataFrame, args: Namespace) -> Optional[pd.DataFrame]:
+    def _cell_magic_data(self, data: pd.DataFrame, args: Namespace) -> pd.DataFrame | None:
         if args.output:
             self.shell.push({args.output: data})  # type: ignore[union-attr]
             return None
