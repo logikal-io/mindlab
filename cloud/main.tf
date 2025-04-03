@@ -1,14 +1,15 @@
 # GitHub Actions
 module "gcp_github_auth" {
-  source = "github.com/logikal-io/terraform-modules//gcp/github-auth?ref=v1.12.6"
+  source = "github.com/logikal-io/terraform-modules//gcp/github-auth?ref=v1.15.0"
 
+  github_organization = var.organization_id
   service_account_accesses = {
     testing = ["logikal-io/mindlab"]
   }
 }
 
 module "aws_github_auth" {
-  source = "github.com/logikal-io/terraform-modules//aws/github-auth?ref=v1.12.6"
+  source = "github.com/logikal-io/terraform-modules//aws/github-auth?ref=v1.15.0"
 
   project_id = var.project_id
   role_accesses = {
@@ -29,7 +30,7 @@ resource "google_project_service" "bigquery" {
 
 # Buckets
 module "gcs_test_data_bucket" {
-  source = "github.com/logikal-io/terraform-modules//gcp/gcs-bucket?ref=v1.12.6"
+  source = "github.com/logikal-io/terraform-modules//gcp/gcs-bucket?ref=v1.15.0"
 
   name = "test-data"
   suffix = var.project_id
@@ -51,7 +52,7 @@ resource "google_storage_object_access_control" "public_test_data_order_line_ite
 
 module "s3_test_data_bucket" {
   providers = {aws = aws.eu_central_1}
-  source = "github.com/logikal-io/terraform-modules//aws/s3-bucket?ref=v1.12.6"
+  source = "github.com/logikal-io/terraform-modules//aws/s3-bucket?ref=v1.15.0"
 
   name = "test-data"
   suffix = var.project_id

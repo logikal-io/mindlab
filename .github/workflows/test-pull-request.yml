@@ -8,7 +8,7 @@ jobs:
     with:
       aws-testing-role: arn:aws:iam::979401941518:role/testing-mindlab-logikal-io
       aws-testing-region: eu-central-2
-      gcp-testing-workload-identity-provider: "projects/TODO/locations/global/\
+      gcp-testing-workload-identity-provider: "projects/435133498609/locations/global/\
                                                workloadIdentityPools/ci-cd/providers/\
                                                github-actions"
       gcp-testing-service-account: testing@mindlab-logikal-io.iam.gserviceaccount.com
