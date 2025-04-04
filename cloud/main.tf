@@ -1,6 +1,6 @@
 # GitHub Actions
 module "gcp_github_auth" {
-  source = "github.com/logikal-io/terraform-modules//gcp/github-auth?ref=v1.15.0"
+  source = "github.com/logikal-io/terraform-modules//gcp/github-auth?ref=v1.15.1"
 
   github_organization = var.organization_id
   service_account_accesses = {
@@ -9,7 +9,7 @@ module "gcp_github_auth" {
 }
 
 module "aws_github_auth" {
-  source = "github.com/logikal-io/terraform-modules//aws/github-auth?ref=v1.15.0"
+  source = "github.com/logikal-io/terraform-modules//aws/github-auth?ref=v1.15.1"
 
   project_id = var.project_id
   role_accesses = {
@@ -30,7 +30,7 @@ resource "google_project_service" "bigquery" {
 
 # Buckets
 module "gcs_test_data_bucket" {
-  source = "github.com/logikal-io/terraform-modules//gcp/gcs-bucket?ref=v1.15.0"
+  source = "github.com/logikal-io/terraform-modules//gcp/gcs-bucket?ref=v1.15.1"
 
   name = "test-data"
   suffix = var.project_id
@@ -42,25 +42,14 @@ resource "google_storage_bucket_object" "test_data_order_line_items" {
   source = "${var.terragrunt_dir}/../tests/mindlab/data/order_line_items.csv"
 }
 
-# TODO: remove this again
-resource "google_storage_object_access_control" "public_test_data_order_line_items" {
-  object = google_storage_bucket_object.test_data_order_line_items.output_name
-  bucket = module.gcs_test_data_bucket.name
-  role = "READER"
-  entity = "allUsers"
-}
-
 module "s3_test_data_bucket" {
-  providers = {aws = aws.eu_central_1}
-  source = "github.com/logikal-io/terraform-modules//aws/s3-bucket?ref=v1.15.0"
+  source = "github.com/logikal-io/terraform-modules//aws/s3-bucket?ref=v1.15.1"
 
   name = "test-data"
   suffix = var.project_id
 }
 
 resource "aws_s3_object" "test_data_order_line_items" {
-  provider = aws.eu_central_1
-
   bucket = module.s3_test_data_bucket.name
   key = "order_line_items/data.csv"
   source = "${var.terragrunt_dir}/../tests/mindlab/data/order_line_items.csv"
@@ -68,16 +57,12 @@ resource "aws_s3_object" "test_data_order_line_items" {
 
 # Athena
 resource "aws_glue_catalog_database" "test" {
-  provider = aws.eu_central_1
-
   name = "test_${var.project}"
   description = "MindLab test data"
   location_uri = "s3://${module.s3_test_data_bucket.name}"
 }
 
 resource "aws_glue_catalog_table" "order_line_items" {
-  provider = aws.eu_central_1
-
   database_name = aws_glue_catalog_database.test.name
   name = "order_line_items"
   table_type = "EXTERNAL_TABLE"
@@ -137,11 +122,11 @@ resource "google_project_iam_member" "service_user" {
   member = "serviceAccount:${module.gcp_github_auth.service_account_emails["testing"]}"
 }
 
-resource "google_project_iam_member" "bigquery_job_user" {
+resource "google_project_iam_member" "bigquery_user" {
   for_each = local.service_accounts
 
   project = var.project_id
-  role = "roles/bigquery.jobUser"
+  role = "roles/bigquery.user"
   member = "serviceAccount:${each.key}"
 }
 

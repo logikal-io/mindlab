@@ -49,7 +49,6 @@ chrome = '132.0.6834.83'
 
 [tool.mindlab]
 organization = 'logikal.io'
-athena_region = 'eu-central-1'
 
 [tool.licenses.extend_allowed_legacy_packages]
 jupyter-sphinx = 'any'  # should be removed after updating to jupyter-sphinx >0.5.3
