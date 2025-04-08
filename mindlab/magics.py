@@ -1,7 +1,7 @@
 import sys
 from argparse import Namespace
 from functools import reduce
-from typing import Any, cast, no_type_check
+from typing import Any, no_type_check
 
 import awswrangler
 import ipywidgets
@@ -13,16 +13,12 @@ from google.auth.credentials import Credentials as GCPCredentials
 from google.cloud import bigquery, exceptions as gcp_exceptions
 from humanize.filesize import naturalsize
 from IPython.core.magic import Magics, cell_magic, line_magic, magics_class
-from IPython.core.magic_arguments import (
-    argument as argument_untyped, magic_arguments, parse_argstring,
-)
+from IPython.core.magic_arguments import argument, magic_arguments, parse_argstring
 from IPython.display import display
 from stormware.amazon.auth import AWSAuth
 from stormware.google.auth import GCPAuth
 
 from mindlab.utils import Timer, get_config, mindlab_config
-
-argument = cast(Any, argument_untyped)  # pylint: disable=invalid-name
 
 
 def compose_magic_decorators(*decorators: Any) -> Any:
@@ -30,7 +26,7 @@ def compose_magic_decorators(*decorators: Any) -> Any:
 
 
 common_arguments = compose_magic_decorators(
-    magic_arguments(),  # type: ignore[no-untyped-call]
+    magic_arguments(),
     argument('output', nargs='?', help='Name of the variable in which to store the output'),
     argument('-o', '--organization', help='The organization to use'),
     argument('-t', '--transpose', action='store_true', help='Display the data frame transposed'),
@@ -232,7 +228,7 @@ class MindLabMagics(Magics):
         details: list[str] | None = None,
     ) -> None:
         timing_info = f' ({timing_info})' if timing_info else ''
-        display(ipywidgets.HTML(value='<br>'.join([  # type: ignore[no-untyped-call]
+        display(ipywidgets.HTML(value='<br>'.join([
             '<b>Query Details</b>',
             *(details or []),
             f'Total time: <b>{total_time_ms:,.0f} ms{timing_info}</b>',

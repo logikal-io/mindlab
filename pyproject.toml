@@ -45,7 +45,7 @@ packages = ['mindlab', 'mindlab.config', 'mindlab.fonts', 'mindlab.styles']
 [tool.setuptools_scm]
 
 [tool.browser.versions]
-chrome = '132.0.6834.83'
+chrome = '132.0.6834.83'  # not used but needed for image assertions
 
 [tool.mindlab]
 organization = 'logikal.io'
@@ -54,7 +54,7 @@ organization = 'logikal.io'
 jupyter-sphinx = 'any'  # should be removed after updating to jupyter-sphinx >0.5.3
 
 [tool.mypy]
-untyped_calls_exclude = ['matplotlib']
+untyped_calls_exclude = ['IPython', 'matplotlib']
 
 [[tool.mypy.overrides]]
 ignore_missing_imports = true
@@ -71,7 +71,7 @@ module = [
 good-names = ['bar']
 
 [tool.pytest.ini_options]
-norecursedirs = ['build', 'docs/jupyter_execute']
+norecursedirs = ['build', 'docs/jupyter_execute', '.ipynb_checkpoints']
 filterwarnings = [
   'error',
   # This can be removed when using jupyter_core 6+

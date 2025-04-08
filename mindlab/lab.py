@@ -24,7 +24,6 @@ def install_config(virtual_env_dir: Path | None = None, force: bool = False) -> 
             'destination': virtual_env_dir / 'share/jupyter/lab/settings/overrides.json',
         },
     }
-
     for name, paths in config.items():
         if force or not paths['destination'].exists():
             print(f'Installing {name} at "{paths["destination"]}')
