@@ -4,18 +4,19 @@ from pathlib import Path
 from pytest import raises
 from pytest_mock import MockerFixture
 
-from mindlab.lab import install_kernel_config, main
+from mindlab.lab import install_config, main
 
 
-def test_install_kernel_config(tmp_path: Path) -> None:
-    install_kernel_config(target_dir=tmp_path)
-    assert (tmp_path / 'ipython_kernel_config.py').exists()
+def test_install_config(tmp_path: Path) -> None:
+    install_config(virtual_env_dir=tmp_path)
+    assert (tmp_path / 'etc/ipython/ipython_kernel_config.py').exists()
+    assert (tmp_path / 'share/jupyter/lab/settings/overrides.json').exists()
 
 
-def test_install_kernel_config_error(mocker: MockerFixture) -> None:
+def test_install_config_error(mocker: MockerFixture) -> None:
     mocker.patch.dict(os.environ, {}, clear=True)
     with raises(RuntimeError, match='virtual environment'):
-        install_kernel_config()
+        install_config()
 
 
 def test_lab(mocker: MockerFixture) -> None:

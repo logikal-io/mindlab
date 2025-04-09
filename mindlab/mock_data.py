@@ -6,6 +6,7 @@ from pandas.core.groupby.generic import DataFrameGroupBy
 
 
 def stock_prices(  # pylint: disable=too-many-arguments
+    *,
     companies: int = 3,
     days: int = 180,
     start_date: date = date(2022, 11, 1),
@@ -15,7 +16,7 @@ def stock_prices(  # pylint: disable=too-many-arguments
     increment_sd: float = 1,
     name_prefix: str = 'RND',
     seed: int = 18,
-) -> DataFrameGroupBy:
+) -> DataFrameGroupBy:  # type: ignore[type-arg]
     """
     Generate mock stock prices.
     """

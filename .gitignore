@@ -3,7 +3,10 @@ __pycache__
 .coverage*
 .mypy_cache/
 .pytest_cache/
-.terragrunt-cache
+.terragrunt-cache/
+.jupyter/
+.ipynb_checkpoints/
+.virtual_documents/
 
 # Build artifacts
 /build/

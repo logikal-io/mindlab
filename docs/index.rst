@@ -7,7 +7,6 @@
     auth
     plotting
     magics
-    spark
     development
     license
 
@@ -24,9 +23,9 @@
     :hide-code:
     :hide-output:
 
-    from mindlab.lab import install_kernel_config
+    from mindlab.lab import install_config
 
-    install_kernel_config()
+    install_config()
 
 .. Start a new kernel
 .. jupyter-kernel:: python3
@@ -79,7 +78,6 @@ defaults and auto-completion:
     ...
     [I ... ServerApp] Jupyter Server is running at:
     [I ... ServerApp] http://localhost:8888/lab?token={token}
-    [I ... ServerApp]  or http://127.0.0.1:8888/lab?token={token}
 
 Executing queries against various data sources is extremely simple using the provided :ref:`MindLab
 Magics <magics:Magics>` (after :ref:`authentication <auth:Authentication>`):
@@ -87,9 +85,10 @@ Magics <magics:Magics>` (after :ref:`authentication <auth:Authentication>`):
 .. jupyter-execute::
 
     %%bigquery
-    SELECT title, `by` AS author, DATETIME(time_ts) AS posted_at, score
-    FROM bigquery-public-data.hacker_news.stories
-    ORDER BY time_ts NULLS LAST
+    SELECT title, `by` AS author, DATETIME(`timestamp`) AS posted_at, score
+    FROM bigquery-public-data.hacker_news.full
+    WHERE type = 'story'
+    ORDER BY timestamp NULLS LAST
     LIMIT 3
 
 Of course, true power lies in combining the magics with MindLab's plotting capabilities:
@@ -97,10 +96,10 @@ Of course, true power lies in combining the magics with MindLab's plotting capab
 .. jupyter-execute::
 
     %%bigquery scores
-    SELECT score, COUNT(*) AS frequency, EXTRACT(YEAR FROM time_ts) as `year`
-    FROM bigquery-public-data.hacker_news.stories
-    WHERE time_ts >= TIMESTAMP '2007-01-01' AND time_ts < TIMESTAMP '2015-01-01'
-          AND score IS NOT NULL
+    SELECT score, COUNT(*) AS frequency, EXTRACT(YEAR FROM `timestamp`) as `year`
+    FROM bigquery-public-data.hacker_news.full
+    WHERE type = 'story' AND score IS NOT NULL
+          AND `timestamp` >= TIMESTAMP '2007-01-01' AND `timestamp` < TIMESTAMP '2015-01-01'
     GROUP BY score, `year`
 
 .. jupyter-execute::
@@ -110,30 +109,3 @@ Of course, true power lies in combining the magics with MindLab's plotting capab
         xlabel='Score', ylabel='Frequency', xscale='log', yscale='log',
     )
     figure.scatter(scores.groupby('year'), cmap='viridis', alpha=0.5)
-
-Spark
------
-MindLab also provides `Spark <https://spark.apache.org/docs/latest/>`_ support (via `PySpark
-<https://spark.apache.org/docs/latest/api/python/>`_) when installed with the ``spark`` extra:
-
-.. code-block:: shell
-
-    pip install mindlab[spark]
-
-This allows you to execute Spark queries locally, even if your data set is located in cloud
-storage:
-
-.. jupyter-execute::
-    :hide-output:
-
-    from mindlab import spark_session
-
-    with spark_session() as spark:
-        path = 'gs://test-data-mindlab-logikal-io/order_line_items.csv'
-        data = spark.read.csv(path, inferSchema=True, header=True).toPandas()
-
-.. jupyter-execute::
-
-    data.head()
-
-For more information check out the :ref:`spark:Spark` section of the documentation.

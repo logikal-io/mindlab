@@ -6,14 +6,15 @@ on:
 jobs:
   publish-release:
     name: Publish release
-    uses: logikal-io/github-workflows/.github/workflows/publish-release.yml@v4
+    uses: logikal-io/github-workflows/.github/workflows/publish-release.yml@v10
     with:
       name: mindlab
-      # Note: versions must be mirrored in the test-pull-request.yml workflow
-      hadoop-version: 3.3.1
-      hadoop-gcs-connector-version: 2.2.11
-      hadoop-aws-module-version: 3.3.1
-      aws-java-sdk-version: 1.11.901
+      docs-workload-identity-provider: "projects/1092349290577/locations/global/\
+                                        workloadIdentityPools/ci-cd/providers/github-actions"
+      docs-uploader-service-account: docs-uploader@docs-logikal-io.iam.gserviceaccount.com
+      docs-target-bucket: website-docs-logikal-io
+      docs-website-service-url-map: website-docs-logikal-io-service
+      docs-https-redirect-url-map: website-docs-logikal-io-https-redirect
     permissions:
       contents: read
       id-token: write

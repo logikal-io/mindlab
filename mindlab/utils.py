@@ -1,21 +1,15 @@
 import time
-from functools import partial
 from os import getenv
-from pathlib import Path
-from typing import Any, Callable, Optional
+from typing import Any
 
-import tomli
+from logikal_utils.project import tool_config
 
-PYPROJECT = (
-    tomli.loads(Path('pyproject.toml').read_text(encoding='utf-8'))
-    if Path('pyproject.toml').exists() else {}
-)
-MINDLAB_CONFIG = PYPROJECT.get('tool', {}).get('mindlab', {})
+mindlab_config = tool_config('mindlab')
 
 
 class Timer:
     def __init__(self) -> None:
-        self.time: Optional[int] = None
+        self.time: int | None = None
 
     def __enter__(self) -> 'Timer':
         self.time = time.perf_counter_ns()
@@ -25,23 +19,16 @@ class Timer:
         self.time = time.perf_counter_ns() - self.time  # type: ignore[operator]
 
 
-def _raise_missing_extra(extra: str, *_args: Any, **_kwargs: Any) -> Any:
-    raise ImportError(f'You must install the `{extra}` extra')
-
-
-def _missing_extra(extra: str) -> Callable[..., Any]:
-    return partial(_raise_missing_extra, extra)
-
-
 def get_config(
-    name: str, value: Optional[Any] = None, value_type: Optional[Any] = None,
+    name: str,
+    value: Any | None = None,
+    value_type: Any | None = None,
     required: bool = False,
 ) -> Any:
     if value is not None:
         return value
 
-    value = MINDLAB_CONFIG.get(name)
-    if value is not None:
+    if (value := mindlab_config.get(name)) is not None:
         return value
 
     value = getenv(f'MINDLAB_{name.upper()}')

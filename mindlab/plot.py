@@ -1,8 +1,10 @@
 import filecmp
 import shutil
-from io import BytesIO, IOBase
+from collections.abc import Iterable
+from io import BytesIO
+from os import PathLike
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
+from typing import IO, Any
 
 import matplotlib
 from matplotlib import artist, colormaps, colors, dates, pyplot, ticker
@@ -10,17 +12,17 @@ from matplotlib.collections import PathCollection
 from matplotlib.legend_handler import HandlerPathCollection
 from pandas import DataFrame, Series
 from pandas.core.groupby.generic import DataFrameGroupBy
-from xdg import xdg_data_home
+from xdg_base_dirs import xdg_data_home
 
 from mindlab.utils import get_config
 
 
-def copy_folder(source_dir: Path, target_dir: Path, extension: Optional[str] = None) -> List[Path]:
+def copy_folder(source_dir: Path, target_dir: Path) -> list[Path]:
     """
     Copy a given source directory to a target directory and return the paths of the copied files.
     """
-    target_files: List[Path] = []
-    for source_file in source_dir.glob(f'*.{extension}' if extension else '*'):
+    target_files: list[Path] = []
+    for source_file in source_dir.glob('*'):
         target_file = target_dir / source_file.name
         target_files.append(target_file)
         if not target_file.exists() or not filecmp.cmp(source_file, target_file):
@@ -30,17 +32,14 @@ def copy_folder(source_dir: Path, target_dir: Path, extension: Optional[str] = N
 
 
 def use_mindlab_styles(
-    style_install_path: Optional[Path] = None,
-    font_install_path: Optional[Path] = None,
+    font_install_path: Path | None = None,
     apply_mindlab_styles: bool = True,
-    project_styles: Optional[Union[bool, Iterable[str]]] = None,
+    project_styles: bool | Iterable[str] | None = None,
 ) -> bool:
     """
     Install and use MindLab and project styles.
 
     Args:
-        style_install_path: The path to install the MindLab styles to.
-            Defaults to the Matplotlib package style library directory.
         font_install_path: The path to install the style fonts to.
             Defaults to ``$XDG_DATA_HOME/fonts``.
         apply_mindlab_styles: Whether to use the MindLab styles.
@@ -58,13 +57,8 @@ def use_mindlab_styles(
 
     # Installing fonts and styles
     font_files = copy_folder(
-        source_dir=Path(__file__).parent / 'config/matplotlib/fonts',
+        source_dir=Path(__file__).parent / 'fonts',
         target_dir=font_install_path or xdg_data_home() / 'fonts',
-    )
-    copy_folder(
-        source_dir=Path(__file__).parent / 'config/matplotlib/styles',
-        target_dir=style_install_path or Path(matplotlib.get_data_path()) / 'stylelib',
-        extension='mplstyle',
     )
 
     # Refreshing font cache if necessary
@@ -74,15 +68,12 @@ def use_mindlab_styles(
         if font_file.suffix == '.ttf' and str(font_file.resolve()) not in font_library:
             font_manager.addfont(str(font_file))
 
-    # Refreshing style library if necessary
-    styles = ['mindlab', 'mindlab-light', *get_config('styles', project_styles, value_type=list)]
-    if any(style not in matplotlib.style.available for style in styles):
-        style_core = matplotlib.style.core
-        base_library = style_core.read_style_directory(style_core.BASE_LIBRARY_PATH)
-        style_core._base_library = base_library  # pylint: disable=protected-access
-        style_core.reload_library()
-
-    matplotlib.style.use(styles)
+    # Applying styles
+    matplotlib.style.use([
+        'mindlab.styles.mindlab',
+        'mindlab.styles.mindlab_light',
+        *get_config('styles', project_styles, value_type=list)
+    ])
     return True
 
 
@@ -91,19 +82,20 @@ use_mindlab_styles()
 
 
 class Figure:
-    def __init__(  # pylint: disable=too-many-arguments
+    def __init__(  # pylint: disable=too-many-arguments, too-complex
         self,
-        size: Optional[Tuple[float, float]] = None,
-        title: Optional[str] = None,
-        xlabel: Optional[str] = None,
-        ylabel: Optional[str] = None,
-        xtics: Optional[str] = None,
-        ytics: Optional[str] = None,
-        xscale: Optional[str] = None,
-        yscale: Optional[str] = None,
-        xlim: Optional[Tuple[Optional[float], Optional[float]]] = None,
-        ylim: Optional[Tuple[Optional[float], Optional[float]]] = None,
-        legend: Optional[str] = 'best',
+        *,
+        size: tuple[float, float] | None = None,
+        title: str | None = None,
+        xlabel: str | None = None,
+        ylabel: str | None = None,
+        xtics: str | None = None,
+        ytics: str | None = None,
+        xscale: str | None = None,
+        yscale: str | None = None,
+        xlim: tuple[float | None, float | None] | None = None,
+        ylim: tuple[float | None, float | None] | None = None,
+        legend: str | None = 'best',
     ):
         """
         Create professional plots easily.
@@ -165,7 +157,7 @@ class Figure:
         self.save(output, format='png')
         return output.getvalue()
 
-    def save(self, output: Union[Path, IOBase], **kwargs: Any) -> None:
+    def save(self, output: str | PathLike[Any] | IO[Any], **kwargs: Any) -> None:
         """
         Save the figure.
 
@@ -216,7 +208,7 @@ class Figure:
 
         # Draw plot
         if args and isinstance(args[0], DataFrameGroupBy):
-            groups: Dict[Any, Any] = args[0].groups
+            groups: dict[Any, Any] = args[0].groups
             if cmap:
                 normalized = colors.Normalize(min(groups.keys()), max(groups.keys()))
             for group in groups:
@@ -239,7 +231,7 @@ class Figure:
                 colorbar = self.figure.colorbar(mappable=mappable, ax=self.axes)
                 colorbar.ax.minorticks_off()
 
-    def bar(self, data: DataFrameGroupBy, **kwargs: Any) -> None:
+    def bar(self, data: DataFrameGroupBy, **kwargs: Any) -> None:  # type: ignore[type-arg]
         """
         Draw a stacked bar chart.
 
@@ -311,7 +303,7 @@ class Figure:
         else:
             raise ValueError(f'Invalid tics setting "{tics}"')
 
-        if tics in ('year', 'month', 'week', 'day') and which == 'x':
+        if tics in {'year', 'month', 'week', 'day'} and which == 'x':
             # Unfortunately axis.set_tick_params does not allow us to set the rotation mode and the
             # horizontal alignment (see https://github.com/matplotlib/matplotlib/issues/13774), so
             # we must use a draw event callback instead.
@@ -341,7 +333,7 @@ class Figure:
         self.figure.canvas.draw()
 
 
-class LogFormatter(ticker.LogFormatterSciNotation):  # type: ignore[misc]
+class LogFormatter(ticker.LogFormatterSciNotation):
     def __call__(self, x: Any, pos: Any = None) -> str:
         value = super().__call__(x, pos=pos)
         overrides = {r'$\mathdefault{10^{0}}$': '1'}

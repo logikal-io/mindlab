@@ -12,7 +12,7 @@ from pytest import CaptureFixture
 from pytest_mock import MockerFixture
 
 from mindlab.magics import MindLabMagics, load_ipython_extension
-from mindlab.utils import MINDLAB_CONFIG
+from mindlab.utils import mindlab_config
 
 
 def test_load_extension(mocker: MockerFixture) -> None:
@@ -24,7 +24,7 @@ def test_load_extension(mocker: MockerFixture) -> None:
 def test_mindlab_config(
     capsys: CaptureFixture[str], mocker: MockerFixture, magics: MindLabMagics,
 ) -> None:
-    mocker.patch.dict(MINDLAB_CONFIG, clear=True)
+    mocker.patch.dict(mindlab_config, clear=True)
     magics.mindlab_config(line='test_key test_value')  # set
     magics.mindlab_config(line='test_key')  # get
     assert capsys.readouterr().out == 'test_value\n'
@@ -71,7 +71,7 @@ def test_bigquery_error(
 def test_athena(magics: MindLabMagics) -> None:
     query = 'SELECT * FROM test_mindlab.order_line_items'
     actual = magics.athena(line='--info', cell=query)
-    for type_from, type_to in {'int32': 'int64', 'float32': 'float64'}.items():
+    for type_from, type_to in {'Int32': 'int64', 'float32': 'float64'}.items():
         actual = actual.astype(
             {column: type_to for column in actual.select_dtypes(type_from).columns}
         )
