@@ -4,18 +4,17 @@ on: pull_request
 jobs:
   run-python-tests:
     name: Run Python tests
-    uses: logikal-io/github-workflows/.github/workflows/run-python-tests.yml@v10
+    uses: logikal-io/github-workflows/.github/workflows/python-run-tests.yml@v12
     with:
-      aws-testing-role: arn:aws:iam::979401941518:role/testing-mindlab-logikal-io
-      aws-testing-region: eu-central-2
-      gcp-testing-workload-identity-provider: "projects/435133498609/locations/global/\
-                                               workloadIdentityPools/ci-cd/providers/\
-                                               github-actions"
-      gcp-testing-service-account: testing@mindlab-logikal-io.iam.gserviceaccount.com
+      aws-role: arn:aws:iam::979401941518:role/testing-mindlab-logikal-io
+      aws-region: eu-central-2
+      gcp-workload-identity-provider: "projects/435133498609/locations/global/\
+                                       workloadIdentityPools/ci-cd/providers/github-actions"
+      gcp-service-account-email: testing@mindlab-logikal-io.iam.gserviceaccount.com
     permissions:
       contents: read
       id-token: write
 
   run-terraform-tests:
     name: Run Terraform tests
-    uses: logikal-io/github-workflows/.github/workflows/run-terraform-tests.yml@v10
+    uses: logikal-io/github-workflows/.github/workflows/terraform-run-tests.yml@v12

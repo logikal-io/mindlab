@@ -1,6 +1,6 @@
 # GitHub Actions
 module "gcp_github_auth" {
-  source = "github.com/logikal-io/terraform-modules//gcp/github-auth?ref=v1.15.1"
+  source = "github.com/logikal-io/terraform-modules//gcp/github-auth"
 
   github_organization = var.organization_id
   service_account_accesses = {
@@ -9,7 +9,7 @@ module "gcp_github_auth" {
 }
 
 module "aws_github_auth" {
-  source = "github.com/logikal-io/terraform-modules//aws/github-auth?ref=v1.15.1"
+  source = "github.com/logikal-io/terraform-modules//aws/github-auth"
 
   project_id = var.project_id
   role_accesses = {
@@ -30,10 +30,10 @@ resource "google_project_service" "bigquery" {
 
 # Buckets
 module "gcs_test_data_bucket" {
-  source = "github.com/logikal-io/terraform-modules//gcp/gcs-bucket?ref=v1.15.1"
+  source = "github.com/logikal-io/terraform-modules//gcp/gcs-bucket"
 
   name = "test-data"
-  suffix = var.project_id
+  name_suffix = var.project_id
 }
 
 resource "google_storage_bucket_object" "test_data_order_line_items" {
@@ -43,10 +43,10 @@ resource "google_storage_bucket_object" "test_data_order_line_items" {
 }
 
 module "s3_test_data_bucket" {
-  source = "github.com/logikal-io/terraform-modules//aws/s3-bucket?ref=v1.15.1"
+  source = "github.com/logikal-io/terraform-modules//aws/s3-bucket"
 
   name = "test-data"
-  suffix = var.project_id
+  name_suffix = var.project_id
 }
 
 resource "aws_s3_object" "test_data_order_line_items" {
@@ -112,7 +112,7 @@ resource "aws_glue_catalog_table" "order_line_items" {
 locals {
   service_accounts = toset([
     module.gcp_github_auth.service_account_emails["testing"],
-    "docs-uploader@docs-logikal-io.iam.gserviceaccount.com",
+    "docs-publisher@docs-logikal-io.iam.gserviceaccount.com",
   ])
 }
 
