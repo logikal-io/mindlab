@@ -5,17 +5,17 @@ locals {
 
   providers = {
     google = {
-      version = "~> 7.11"
+      version = "~> 7.22"
       region = "europe-west6"
     }
     aws = {
-      version = "~> 6.20"
+      version = "~> 6.35"
       region = "eu-central-2"
     }
   }
 
   modules = {
-    "github.com/logikal-io/terraform-modules" = "v4.0.0"
+    "github.com/logikal-io/terraform-modules" = "v5.0.0"
   }
 }
 

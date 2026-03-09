@@ -17,12 +17,6 @@ module "aws_github_auth" {
   }
 }
 
-provider "aws" {
-  profile = var.organization_id
-  region = "eu-central-1"  # override (Athena and Glue are not available in eu-central-2 yet)
-  alias = "eu_central_1"
-}
-
 # BigQuery
 resource "google_project_service" "bigquery" {
   service = "bigquery.googleapis.com"

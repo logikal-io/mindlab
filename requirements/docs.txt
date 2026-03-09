@@ -2,4 +2,4 @@
 -r core.txt
 -r extras/jupyter.txt
 
-logikal-docs[jupyter]==1.2.4
+logikal-docs[jupyter]==1.2.5
