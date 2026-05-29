@@ -93,45 +93,46 @@ class MagicsDocumenter(Documenter):
                     self._document_magic(magic=member.object, magic_type=magic_type)
 
 
+class LineMagicDirective(domains.std.GenericObject):
+    magic_prefix = '%'
+    indextemplate = 'pair: %s; linemagic'
+
+    def _object_hierarchy_parts(self, sig_node: addnodes.desc_signature) -> tuple[str, ...]:
+        name_index = sig_node.first_child_matching_class(addnodes.desc_name)
+        name = cast(str, sig_node[name_index].rawsource)
+        return (name, ) if name_index is not None else ()
+
+    def _toc_entry_name(self, sig_node: addnodes.desc_signature) -> Any:
+        if parts := sig_node.get('_toc_parts'):
+            return cast(str, parts[-1])
+        return ''
+
+    @classmethod
+    def parse_node(
+        cls,
+        env: BuildEnvironment,  # pylint: disable=unused-argument
+        sig: str,
+        signode: addnodes.desc_signature,
+    ) -> str:
+        if not (magic := re.search(r'%([\w_]+)(.*)', sig)):
+            raise RuntimeError(f'Invalid magic command "{sig}"')
+        name = magic.group(1)
+        signode += addnodes.desc_sig_operator(cls.magic_prefix, cls.magic_prefix)
+        signode += addnodes.desc_name(name, name)
+        if arguments := magic.group(2).strip():
+            signode += addnodes.desc_sig_space(' ', ' ')
+            signode += addnodes.desc_sig_keyword(arguments, arguments)
+        return name
+
+
+class CellMagicDirective(LineMagicDirective):
+    magic_prefix = '%%'
+    indextemplate = 'pair: %s; cellmagic'
+
+
 def setup(app: Sphinx) -> None:
     app.add_autodocumenter(MagicsDocumenter)
 
-    # Directives for magics
-    class LineMagicDirective(domains.std.GenericObject):
-        magic_prefix = '%'
-        indextemplate = 'pair: %s; linemagic'
-
-        def _object_hierarchy_parts(self, sig_node: addnodes.desc_signature) -> tuple[str, ...]:
-            name_index = sig_node.first_child_matching_class(addnodes.desc_name)
-            name = cast(str, sig_node[name_index].rawsource)
-            return (name, ) if name_index is not None else ()
-
-        def _toc_entry_name(self, sig_node: addnodes.desc_signature) -> Any:
-            if parts := sig_node.get('_toc_parts'):
-                return cast(str, parts[-1])
-            return ''
-
-        @classmethod
-        def parse_node(
-            cls,
-            env: BuildEnvironment,  # pylint: disable=unused-argument
-            sig: str, signode: addnodes.desc_signature,
-        ) -> str:
-            if not (magic := re.search(r'%([\w_]+)(.*)', sig)):
-                raise RuntimeError(f'Invalid magic command "{sig}"')
-            name = magic.group(1)
-            signode += addnodes.desc_sig_operator(cls.magic_prefix, cls.magic_prefix)
-            signode += addnodes.desc_name(name, name)
-            if arguments := magic.group(2).strip():
-                signode += addnodes.desc_sig_space(' ', ' ')
-                signode += addnodes.desc_sig_keyword(arguments, arguments)
-            return name
-
-    class CellMagicDirective(LineMagicDirective):
-        magic_prefix = '%%'
-        indextemplate = 'pair: %s; cellmagic'
-
-    # Add magic directives and roles to the standard domain
     for magic_type, directive in {'line': LineMagicDirective, 'cell': CellMagicDirective}.items():
         role = f'{magic_type}magic'
 
