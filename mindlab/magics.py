@@ -48,7 +48,7 @@ class MindLabMagics(Magics):
         """
         Magics for data science work.
         """
-        super().__init__(shell, **kwargs)  # type: ignore[no-untyped-call]
+        super().__init__(shell, **kwargs)
         pd.set_option('display.max_columns', 50)
         pd.set_option('display.max_rows', 500)
         self._aws_auth = AWSAuth()
@@ -101,60 +101,6 @@ class MindLabMagics(Magics):
             self._display_query_details(
                 total_time_ms=timer.time / 1e6,
                 details=[f'Data processed: <b>{processed}</b>'],
-            )
-
-        return self._cell_magic_data(data=data, args=args)
-
-    @no_type_check
-    @common_aws_arguments
-    @argument('-d', '--database', default='default', help='The database to use')
-    @argument('-w', '--workgroup', default='primary', help='The workgroup to use')
-    @cell_magic
-    def athena(self, line: str, cell: str) -> pd.DataFrame | None:
-        """
-        Run an Amazon Athena query.
-        """
-        args = parse_argstring(self.athena, line)
-        session = self._aws_session(args, magic='athena')
-        try:
-            data = awswrangler.athena.read_sql_query(
-                sql=cell,
-                database=self.get_config('athena_database', args.database),
-                workgroup=self.get_config('athena_workgroup', args.workgroup),
-                ctas_approach=False,
-                encryption='SSE_S3', boto3_session=session,
-            )
-        except aws_exceptions.UnauthorizedSSOTokenError as error:
-            print(f'Profile: {session.profile_name}', file=sys.stderr)
-            print(f'Error: {error}', file=sys.stderr)
-            return None
-        except (
-            aws_exceptions.BotoCoreError,
-            aws_exceptions.ClientError,
-            awswrangler.exceptions.QueryFailed,
-            awswrangler.exceptions.QueryCancelled,
-        ) as error:
-            print(f'Error: {error}', file=sys.stderr)
-            return None
-
-        if args.info:
-            stats = data.query_metadata['Statistics']
-            planned = stats.get('QueryPlanningTimeInMillis', 0)
-            timing = {
-                'queued': stats.get('QueryQueueTimeInMillis', 0),
-                'planned': planned,
-                'executed': stats['EngineExecutionTimeInMillis'] - planned,
-                'processed': stats.get('ServiceProcessingTimeInMillis', 0),
-            }
-            timing_info = ' » '.join(f'{name} {value:,.0f} ms' for name, value in timing.items())
-            scanned = naturalsize(stats['DataScannedInBytes'])
-            self._display_query_details(
-                total_time_ms=stats["TotalExecutionTimeInMillis"],
-                timing_info=timing_info,
-                details=[
-                    f'Data scanned: <b>{scanned}</b>',
-                    f'Job ID: <em>{data.query_metadata["QueryExecutionId"]}</em>',
-                ],
             )
 
         return self._cell_magic_data(data=data, args=args)

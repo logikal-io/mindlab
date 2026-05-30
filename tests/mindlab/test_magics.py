@@ -2,7 +2,6 @@ import re
 from datetime import date
 from pathlib import Path
 
-import awswrangler
 import redshift_connector
 from botocore import exceptions as aws_exceptions
 from google.cloud.exceptions import BadRequest
@@ -66,32 +65,6 @@ def test_bigquery_error(
     query.to_dataframe.side_effect = BadRequest('Test')  # type: ignore[no-untyped-call]
     assert magics.bigquery(line='', cell='') is None
     assert capsys.readouterr().err == 'Error: 400 Test\n'
-
-
-def test_athena(magics: MindLabMagics) -> None:
-    query = 'SELECT * FROM test_mindlab.order_line_items'
-    actual = magics.athena(line='--info', cell=query)
-    for type_from, type_to in {'Int32': 'int64', 'float32': 'float64'}.items():
-        actual = actual.astype(
-            {column: type_to for column in actual.select_dtypes(type_from).columns}
-        )
-    expected = read_csv(Path(__file__).parent / 'data/order_line_items.csv')
-    expected = expected.astype({'sku': 'string'})
-    assert_frame_equal(actual, expected)
-
-
-def test_athena_error(
-    capsys: CaptureFixture[str], mocker: MockerFixture, magics: MindLabMagics,
-) -> None:
-    read_sql_query = mocker.patch('mindlab.magics.awswrangler.athena.read_sql_query')
-
-    read_sql_query.side_effect = aws_exceptions.UnauthorizedSSOTokenError
-    assert magics.athena(line='', cell='') is None
-    assert re.search('Error: .* SSO session .* invalid', capsys.readouterr().err)
-
-    read_sql_query.side_effect = awswrangler.exceptions.QueryFailed('Test')
-    assert magics.athena(line='', cell='') is None
-    assert re.match('Error: Test', capsys.readouterr().err)
 
 
 def test_redshift(mocker: MockerFixture, magics: MindLabMagics) -> None:
