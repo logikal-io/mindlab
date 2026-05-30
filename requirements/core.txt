@@ -1,13 +1,13 @@
 # Packages with external visibility (in magics or plotting)
-awswrangler[redshift]==3.15.1
-google-cloud-bigquery[pandas,tqdm]~=3.40  # stormware pins it
-matplotlib==3.10.8
+awswrangler[redshift]==3.16.1
+google-cloud-bigquery[pandas,tqdm]~=3.41  # stormware pins it
+matplotlib==3.10.9
 
 # Packages without external visibility (internally used, unlikely to change functionality)
-logikal-utils~=1.6
+logikal-utils~=1.9
 numpy~=2.4
 pandas~=3.0
 pandas-stubs~=3.0
 scipy~=1.17
-stormware[google,amazon]~=3.0
+stormware[google,amazon]~=4.0
 xdg-base-dirs~=6.0

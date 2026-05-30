@@ -1,5 +1,5 @@
 [build-system]
-requires = ['setuptools>=64', 'setuptools-scm>=8']
+requires = ['setuptools>=80', 'setuptools-scm[simple]>=10']
 build-backend = 'setuptools.build_meta'
 
 [project]
@@ -42,15 +42,14 @@ jupyter = {file = 'requirements/extras/jupyter.txt'}
 [tool.setuptools]
 packages = ['mindlab', 'mindlab.config', 'mindlab.fonts', 'mindlab.styles']
 
-[tool.setuptools_scm]
-
 [tool.browser.versions]
-chrome = '132.0.6834.83'  # not used but needed for image assertions
+chrome = '148.0.7778.216'  # not used but needed for image assertions
 
 [tool.mindlab]
 organization = 'logikal.io'
 
 [tool.licenses.extend_allowed_legacy_packages]
+ujson = 'BSD-3-Clause AND TCL'
 jupyter-sphinx = 'any'  # should be removed after updating to jupyter-sphinx >0.5.3
 
 [tool.mypy]
@@ -76,8 +75,6 @@ filterwarnings = [
   'error',
   # This can be removed when using jupyter_core 6+
   'ignore:Jupyter is migrating its paths.*:DeprecationWarning',
-  # See https://github.com/boto/boto3/issues/3889
-  'ignore:datetime.datetime.utcnow:DeprecationWarning',
 ]
 
 [tool.coverage.report]

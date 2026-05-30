@@ -254,12 +254,7 @@ class Figure:
             )
             bottom = bottom.add(group_data[[y_column]], fill_value=0)
 
-    def kde(
-        self,
-        series: Series,  # type: ignore[type-arg]
-        rug: bool = True,
-        **kwargs: Any,
-    ) -> None:
+    def kde(self, series: Series, rug: bool = True, **kwargs: Any) -> None:
         """
         Draw a kernel density estimation plot.
 

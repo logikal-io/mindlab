@@ -11,6 +11,11 @@ from sphinx.ext.autodoc import Documenter, ObjectMember
 from sphinx.ext.autodoc.importer import get_class_members
 from sphinx.roles import XRefRole
 
+
+def strip_patch(package: str) -> str:
+    return '.'.join(pkg_version(package).split('.')[0:2])  # major.minor (excluding patch)
+
+
 extensions = [
     'sphinx.ext.autosectionlabel',
     'sphinx.ext.autodoc',
@@ -19,12 +24,12 @@ extensions = [
 ]
 intersphinx_mapping = {
     'python': (f'https://docs.python.org/{sys.version_info[0]}.{sys.version_info[1]}', None),
-    'pandas': (f'https://pandas.pydata.org/pandas-docs/version/{pkg_version('pandas')}', None),
+    'pandas': (f'https://pandas.pydata.org/pandas-docs/version/{strip_patch('pandas')}', None),
     'matplotlib': (f'https://matplotlib.org/{pkg_version('matplotlib')}/', None),
     'stormware': (f'https://docs.logikal.io/stormware/{pkg_version('stormware')}/', None),
 }
 nitpick_ignore = [
-    ('py:class', 'pandas.core.groupby.generic.DataFrameGroupBy'),
+    ('py:class', 'pandas.api.typing.DataFrameGroupBy'),
 ]
 
 
