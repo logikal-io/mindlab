@@ -4,7 +4,7 @@ lines.marker: o
 lines.markeredgewidth: 1.5
 lines.solid_joinstyle: round
 lines.solid_capstyle: butt
-markers.fillstyle: None
+markers.fillstyle: none
 
 # Patches
 patch.linewidth: 1

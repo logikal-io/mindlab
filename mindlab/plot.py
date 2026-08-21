@@ -4,12 +4,13 @@ from collections.abc import Iterable
 from io import BytesIO
 from os import PathLike
 from pathlib import Path
-from typing import IO, Any
+from typing import IO, Any, cast
 
 import matplotlib
 from matplotlib import artist, colormaps, colors, dates, pyplot, ticker
 from matplotlib.collections import PathCollection
 from matplotlib.legend_handler import HandlerPathCollection
+from matplotlib.typing import LegendLocType
 from pandas import DataFrame, Series
 from pandas.core.groupby.generic import DataFrameGroupBy
 from xdg_base_dirs import xdg_data_home
@@ -146,7 +147,10 @@ class Figure:
         if ylim:
             self.axes.set_ylim(*ylim)
         if legend:
-            self._legend_location = legend.replace('top', 'upper').replace('bottom', 'lower')
+            self._legend_location = cast(
+                LegendLocType,
+                legend.replace('top', 'upper').replace('bottom', 'lower'),
+            )
             self.figure.canvas.mpl_connect('draw_event', self._add_legend)
 
     def __getattr__(self, name: str) -> Any:
