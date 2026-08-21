@@ -204,7 +204,7 @@ class Figure:
         # Apply colors to facecolor
         if color_values is not None and not isinstance(color_values, str):
             normalize = colors.Normalize()
-            kwargs['facecolor'] = pyplot.get_cmap(cmap)(normalize(color_values))
+            kwargs['facecolor'] = colormaps.get_cmap(cmap)(normalize(color_values))
 
         # Draw plot
         if args and isinstance(args[0], DataFrameGroupBy):
