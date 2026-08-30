@@ -74,7 +74,11 @@ norecursedirs = ['build', 'docs/jupyter_execute', '.ipynb_checkpoints']
 filterwarnings = [
   'error',
   # See https://github.com/googleapis/google-cloud-python/issues/18181
-  'ignore:Retrieving Arrow record batches directly.*is deprecated.*:PendingDeprecationWarning',
+  'ignore:Loading DataFrames .* is deprecated.*:PendingDeprecationWarning',
+  'ignore:Inserting rows from DataFrames .* is deprecated.*:PendingDeprecationWarning',
+  'ignore:Retrieving DataFrames .* is deprecated.*:PendingDeprecationWarning',
+  'ignore:Retrieving PyArrow Tables .* is deprecated.*:PendingDeprecationWarning',
+  'ignore:Retrieving Arrow record batches directly .* is deprecated.*:PendingDeprecationWarning',
   # This can be removed when using jupyter_core 6+
   'ignore:Jupyter is migrating its paths.*:DeprecationWarning',
 ]
