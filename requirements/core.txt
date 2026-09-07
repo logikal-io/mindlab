@@ -1,6 +1,6 @@
 # Packages with external visibility (in magics or plotting)
 awswrangler[redshift]==3.17.1
-google-cloud-bigquery[pandas,tqdm]==3.44.0
+google-cloud-bigquery[pandas,tqdm]==3.45.0
 matplotlib==3.11.1
 
 # Packages without external visibility (internally used, unlikely to change functionality)
